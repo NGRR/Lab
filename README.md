@@ -12,6 +12,6 @@ Cada proyecto vive en su propia carpeta, con documentación, dependencias y lím
 
 ## Publicación web
 
-El archivo \`index.html\` de la raíz actúa como índice navegable si GitHub Pages se habilita para \`main\` / \`/(root)\`.
+El archivo `index.html` de la raíz actúa como índice navegable si GitHub Pages se habilita para `main` / `/(root)`.
 
 > **Nota de derechos:** el repositorio fue creado con licencia CC0 1.0. Revisar los derechos y la licencia antes de incorporar obras, grabaciones, fotografías, tipografías u otros materiales protegidos.
