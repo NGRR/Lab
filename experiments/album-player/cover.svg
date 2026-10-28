@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="t d">
+<title id="t">LAB 001</title><desc id="d">Composición geométrica abstracta con anillos concéntricos.</desc>
+<rect width="800" height="800" fill="#c6c0ae"/>
+<rect x="26" y="26" width="748" height="748" fill="none" stroke="#151515" stroke-width="2"/>
+<g fill="none" stroke="#151515" stroke-width="1.8" opacity=".82">
+  <circle cx="400" cy="400" r="275"/>
+  <circle cx="400" cy="400" r="221"/>
+  <circle cx="400" cy="400" r="168"/>
+  <circle cx="400" cy="400" r="115"/>
+  <circle cx="400" cy="400" r="61"/>
+  <path d="M400 65v670M65 400h670"/>
+</g>
+<path d="M400 125A275 275 0 0 1 675 400" fill="none" stroke="#151515" stroke-width="12"/>
+<path d="M179 400A221 221 0 0 1 400 179" fill="none" stroke="#151515" stroke-width="25"/>
+<circle cx="400" cy="400" r="15" fill="#151515"/>
+<text x="55" y="77" fill="#151515" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" letter-spacing="4">LAB / 001</text>
+<text x="55" y="738" fill="#151515" font-family="Arial,Helvetica,sans-serif" font-size="17" letter-spacing="3">SIGNAL / CONTINUITY</text>
+<text x="745" y="738" text-anchor="end" fill="#151515" font-family="Arial,Helvetica,sans-serif" font-size="17">2026</text>
+</svg>
