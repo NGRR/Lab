@@ -1,0 +1,21 @@
+{
+  "title": "Señales de prueba",
+  "artist": "LAB / audio experimental",
+  "year": 2026,
+  "cover": "./cover.svg",
+  "audio": null,
+  "tracks": [
+    {
+      "title": "I. Umbral",
+      "start": 0
+    },
+    {
+      "title": "II. Deriva",
+      "start": 22
+    },
+    {
+      "title": "III. Permanencia",
+      "start": 44
+    }
+  ]
+}
