@@ -37,6 +37,7 @@ No abrir `index.html` con el esquema `file://`, porque `fetch("./album.json")` r
   "artist": "Nombre del artista",
   "year": 2026,
   "cover": "./assets/portada.jpg",
+  "mediaArtwork": "./assets/portada-128.png",
   "audio": "./assets/album.mp3",
   "tracks": [
     { "title": "Primera pista", "start": 0 },
@@ -46,13 +47,22 @@ No abrir `index.html` con el esquema `file://`, porque `fetch("./album.json")` r
 }
 ```
 
-Las posiciones están en **segundos desde el comienzo del álbum**, deben crecer estrictamente y comenzar en 0. El listado no corta ni concatena archivos: al saltar a una pista se cambia `audio.currentTime`. La duración total se lee de los metadatos del archivo. Para controles de bloqueo, es preferible una portada JPEG o PNG accesible por URL absoluta o relativa.
+Las posiciones están en **segundos desde el comienzo del álbum**, deben crecer estrictamente y comenzar en 0. El listado no corta ni concatena archivos: al saltar a una pista se cambia `audio.currentTime`. La duración total se lee de los metadatos del archivo. Para controles de bloqueo, `mediaArtwork` debe apuntar a un PNG o JPEG cuadrado (el prototipo incluye `cover-128.png`, derivado de la portada SVG). La portada visual de la web (`cover`) puede seguir siendo SVG. En iOS la representación concreta queda a criterio de WebKit.
 
 ## Interacción y diseño
 
 - Botón de portada circular, negro al 60 % de opacidad, con reproducción/pausa sincronizada.
 - Controles SVG planos de alto contraste y acentos ocres, con estados accesibles.
-- Barra de progreso visual, navegación entre pistas y transiciones respetuosas con `prefers-reduced-motion`.
+- Barra de progreso visual por pista, navegación entre pistas y transiciones respetuosas con `prefers-reduced-motion`.
+
+## Integración con los controles de iPhone
+
+- La sesión registra `previoustrack` y `nexttrack`, sin registrar `seekbackward` y `seekforward`; los saltos de ±10 s en iOS pueden desplazar los botones de pista.
+- Los handlers se registran otra vez cuando el audio dispara `playing`, pues algunas versiones de Safari no los consideran activos si se registran antes de iniciar.
+- Media Session publica el título actual y una posición/duración relativa a cada pista virtual mediante `setPositionState`. Si el navegador no respeta esa API, puede seguir mostrando el archivo completo.
+- El archivo de audio sigue siendo uno solo. Esta técnica no crea verdaderos archivos independientes; la navegación externa es una mejora condicionada a WebKit.
+- `seekto` se mapea desde la posición relativa de la pista a `audio.currentTime` del álbum continuo.
+- En el prototipo, el artwork de pantalla bloqueada se deriva en PNG 128 × 128 de la portada SVG; en un disco real conviene proporcionar PNG/JPEG independiente.
 
 ## Reproducción en segundo plano
 
