@@ -20,6 +20,10 @@
       <div class="art-column">
         <div class="cover-frame">
           <img id="cover" src="./cover.svg" alt="Portada del álbum" width="800" height="800">
+          <button id="cover-play" class="cover-play" type="button" aria-label="Reproducir álbum" disabled>
+            <svg class="media-icon icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.25a1 1 0 0 1 1.52-.85l10.25 6.75a1 1 0 0 1 0 1.7L9.52 19.6A1 1 0 0 1 8 18.75Z"/></svg>
+            <svg class="media-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="4.5" width="4" height="15" rx="1"/><rect x="13.5" y="4.5" width="4" height="15" rx="1"/></svg>
+          </button>
         </div>
         <p class="technical">HTML5 AUDIO / MEDIA SESSION / CONTINUOUS STREAM</p>
       </div>
@@ -38,9 +42,9 @@
             <div class="times"><span id="elapsed">00:00</span><span id="duration">00:00</span></div>
           </div>
           <div class="transport">
-            <button id="previous" class="transport-secondary" type="button" aria-label="Pista anterior" disabled>⏮</button>
-            <button id="play" class="transport-primary" type="button" aria-label="Reproducir" disabled>▶</button>
-            <button id="next" class="transport-secondary" type="button" aria-label="Pista siguiente" disabled>⏭</button>
+            <button id="previous" class="transport-secondary" type="button" aria-label="Pista anterior" disabled><svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4.5" y="5.5" width="2.5" height="13" rx=".7"/><path d="M18.5 5.6a1 1 0 0 0-1.5-.85L8.3 11.1a1.1 1.1 0 0 0 0 1.8l8.7 6.35a1 1 0 0 0 1.5-.85Z"/></svg></button>
+            <button id="play" class="transport-primary" type="button" aria-label="Reproducir" disabled><svg class="media-icon icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.25a1 1 0 0 1 1.52-.85l10.25 6.75a1 1 0 0 1 0 1.7L9.52 19.6A1 1 0 0 1 8 18.75Z"/></svg><svg class="media-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="4.5" width="4" height="15" rx="1"/><rect x="13.5" y="4.5" width="4" height="15" rx="1"/></svg></button>
+            <button id="next" class="transport-secondary" type="button" aria-label="Pista siguiente" disabled><svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="17" y="5.5" width="2.5" height="13" rx=".7"/><path d="M5.5 5.6a1 1 0 0 1 1.5-.85l8.7 6.35a1.1 1.1 0 0 1 0 1.8L7 19.25a1 1 0 0 1-1.5-.85Z"/></svg></button>
           </div>
           <p class="hint">El audio puede continuar al bloquear la pantalla; el comportamiento depende del navegador y del sistema operativo.</p>
           <button id="demo" class="demo-button" type="button" hidden>Cargar demostración sonora</button>
