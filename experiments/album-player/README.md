@@ -9,7 +9,7 @@ Prototipo de reproductor web para un **álbum continuo** orientado a móviles. D
 - Media Session API: metadatos y acciones de pantalla bloqueada cuando el dispositivo las admite.
 - Pistas virtuales definidas por posiciones de tiempo dentro de un único archivo.
 - Interfaz adaptable y sin dependencias, rastreadores ni servidores propios.
-- Demostración WAV **original** de 66 segundos, generada localmente al pulsar el botón correspondiente.
+- Demostración WAV **original** de 66 segundos, generada localmente al pulsar **Play** (portada o controles).
 - Sin audio comercial ni disco real incluido.
 - PWA/offline **no implementados** en esta versión.
 
@@ -21,7 +21,7 @@ Servir el repositorio por HTTP, por ejemplo:
 python3 -m http.server 8000
 ```
 
-Abrir `http://localhost:8000/experiments/album-player/` y pulsar **Cargar demostración sonora**, luego **Reproducir**.
+Abrir `http://localhost:8000/experiments/album-player/` y pulsar **Play** sobre la portada o en los controles inferiores. Si el manifiesto no incluye un archivo, se genera automáticamente la demostración sonora y comienza a reproducirse.
 
 No abrir `index.html` con el esquema `file://`, porque `fetch("./album.json")` requiere un entorno HTTP(S) compatible.
 
@@ -47,6 +47,12 @@ No abrir `index.html` con el esquema `file://`, porque `fetch("./album.json")` r
 ```
 
 Las posiciones están en **segundos desde el comienzo del álbum**, deben crecer estrictamente y comenzar en 0. El listado no corta ni concatena archivos: al saltar a una pista se cambia `audio.currentTime`. La duración total se lee de los metadatos del archivo. Para controles de bloqueo, es preferible una portada JPEG o PNG accesible por URL absoluta o relativa.
+
+## Interacción y diseño
+
+- Botón de portada circular, negro al 60 % de opacidad, con reproducción/pausa sincronizada.
+- Controles SVG planos de alto contraste y acentos ocres, con estados accesibles.
+- Barra de progreso visual, navegación entre pistas y transiciones respetuosas con `prefers-reduced-motion`.
 
 ## Reproducción en segundo plano
 
