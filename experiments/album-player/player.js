@@ -3,10 +3,10 @@ import { createDemoAudio } from "./demo.js";
 const byId = (id) => document.getElementById(id);
 const audio = byId("audio");
 const playButton = byId("play");
+const coverPlayButton = byId("cover-play");
 const previousButton = byId("previous");
 const nextButton = byId("next");
 const seek = byId("seek");
-const demoButton = byId("demo");
 const status = byId("status");
 const trackList = byId("tracks");
 
@@ -14,6 +14,7 @@ let album = null;
 let activeIndex = -1;
 let demoObjectUrl = null;
 let scrubbing = false;
+let startingPlayback = false;
 
 function message(text) {
   status.textContent = text;
@@ -76,18 +77,23 @@ function update() {
   const ready = duration > 0;
   const time = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
 
-  playButton.disabled = !ready;
+  const isPlaying = !audio.paused && !audio.ended;
+  playButton.disabled = !album;
+  coverPlayButton.disabled = !album;
   previousButton.disabled = !ready;
   nextButton.disabled = !ready;
   seek.disabled = !ready;
-  playButton.textContent = !audio.paused ? "Ⅱ" : "▶";
-  playButton.setAttribute("aria-label", !audio.paused ? "Pausar" : "Reproducir");
+  playButton.classList.toggle("is-playing", isPlaying);
+  coverPlayButton.classList.toggle("is-playing", isPlaying);
+  playButton.setAttribute("aria-label", isPlaying ? "Pausar" : "Reproducir");
+  coverPlayButton.setAttribute("aria-label", isPlaying ? "Pausar álbum" : "Reproducir álbum");
 
   byId("duration").textContent = clock(duration);
   if (!scrubbing) {
     byId("elapsed").textContent = clock(time);
     seek.max = duration || 100;
     seek.value = ready ? Math.max(0, Math.min(time, duration)) : 0;
+    seek.style.setProperty("--progress", (ready ? Math.min(100, Math.max(0, time / duration * 100)) : 0) + "%");
   }
 
   const nextIndex = currentIndex(time);
@@ -111,16 +117,42 @@ function update() {
   mediaPosition();
 }
 
+function ensureAudioSource() {
+  if (audio.getAttribute("src")) return true;
+  if (!album) return false;
+  try {
+    // Esta preparación es síncrona para mantener la activación del usuario:
+    // la llamada a audio.play() ocurre dentro del mismo evento de clic.
+    demoObjectUrl = createDemoAudio();
+    audio.src = demoObjectUrl;
+    audio.load();
+    return true;
+  } catch (error) {
+    message("No se pudo preparar la demostración sonora.");
+    console.error(error);
+    return false;
+  }
+}
+
 async function play() {
-  if (!audio.getAttribute("src")) return;
+  if (!ensureAudioSource()) return;
+  startingPlayback = true;
+  message("Iniciando reproducción…");
   try {
     await audio.play();
     message("Reproduciendo.");
   } catch (error) {
-    message("El navegador impidió iniciar el audio. Inicia desde el botón Reproducir.");
+    message("El navegador no pudo iniciar el audio. Intenta reproducir de nuevo.");
     console.warn("No se pudo iniciar el audio", error);
+  } finally {
+    startingPlayback = false;
+    update();
   }
-  update();
+}
+
+function togglePlayback() {
+  if (!audio.paused && !audio.ended) audio.pause();
+  else void play();
 }
 
 function seekTo(position) {
@@ -246,25 +278,24 @@ async function initialize() {
       audio.load();
       message("Cargando álbum…");
     } else {
-      demoButton.hidden = false;
-      message("Sin audio publicado. Carga la demostración para probar el reproductor.");
+      message("Prototipo sin disco cargado. Pulsa Play para escuchar la señal de prueba.");
     }
+    update();
   } catch (error) {
     message("Error de configuración: " + error.message + " Ejecuta la página desde un servidor HTTP(S).");
     console.error(error);
   }
 }
 
-playButton.addEventListener("click", () => {
-  if (audio.paused) void play();
-  else audio.pause();
-});
+playButton.addEventListener("click", togglePlayback);
+coverPlayButton.addEventListener("click", togglePlayback);
 previousButton.addEventListener("click", previous);
 nextButton.addEventListener("click", next);
 
 seek.addEventListener("input", () => {
   scrubbing = true;
   byId("elapsed").textContent = clock(Number(seek.value));
+  seek.style.setProperty("--progress", (usableDuration() ? Number(seek.value) / usableDuration() * 100 : 0) + "%");
 });
 seek.addEventListener("change", () => {
   seekTo(Number(seek.value));
@@ -272,31 +303,18 @@ seek.addEventListener("change", () => {
   update();
 });
 
-demoButton.addEventListener("click", () => {
-  demoButton.disabled = true;
-  message("Generando demostración WAV original…");
-  try {
-    demoObjectUrl = createDemoAudio();
-    audio.src = demoObjectUrl;
-    audio.load();
-    demoButton.hidden = true;
-    message("Demostración preparada. Pulsa Reproducir.");
-  } catch (error) {
-    demoButton.disabled = false;
-    message("No se pudo generar la demostración.");
-    console.error(error);
-  }
-});
-
 audio.addEventListener("loadedmetadata", () => {
   enableTracks();
   update();
-  message("Álbum preparado. Pulsa Reproducir.");
+  if (!startingPlayback) message("Álbum preparado. Pulsa Reproducir.");
 });
 audio.addEventListener("timeupdate", update);
 audio.addEventListener("durationchange", () => { enableTracks(); update(); });
 audio.addEventListener("play", update);
-audio.addEventListener("pause", update);
+audio.addEventListener("pause", () => {
+  update();
+  if (!audio.ended && !startingPlayback) message("Pausado.");
+});
 audio.addEventListener("ended", () => { message("Fin del álbum."); update(); });
 audio.addEventListener("error", () => {
   message("No se pudo cargar el audio. Comprueba la ruta, el formato y el alojamiento HTTP.");
