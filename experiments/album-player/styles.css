@@ -176,17 +176,6 @@ input[type="range"]:disabled { cursor: not-allowed; opacity: .45; }
 .transport-primary .icon-play { margin-left: 3px; }
 .hint { font-size: 11px; color: var(--muted); margin: 13px 0 8px; max-width: 490px; }
 .status { font-size: 12px; min-height: 18px; color: var(--accent); margin: 14px 0 0; }
-.demo-button {
-  background: var(--surface-raised);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px 17px;
-  color: var(--text);
-  font-size: 12px;
-  font-weight: 500;
-  margin-top: 16px;
-  min-height: 44px;
-}
 .track-section { margin-top: clamp(40px, 6vw, 70px); }
 .track-heading { padding: 0 0 15px; border-bottom: 1px solid var(--line); }
 .tracks { padding: 0; margin: 0; list-style: none; }
@@ -229,11 +218,10 @@ input[type="range"]:disabled { cursor: not-allowed; opacity: .45; }
   .cover-play:not(:disabled):hover { transform: translate(-50%, -50%) scale(1.08); background: rgb(0 0 0 / 74%); border-color: rgb(239 238 233 / 60%); }
   .transport-primary:not(:disabled):hover { background: var(--text); border-color: var(--text) !important; transform: translateY(-2px); }
   .transport-secondary:not(:disabled):hover { background: #33312d; color: var(--text); transform: translateY(-2px); }
-  .demo-button:not(:disabled):hover { background: #33312d; border-color: var(--accent); }
   .track-row:not(:disabled):hover { color: var(--text); background: var(--surface-raised); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .cover-play, .transport button, .demo-button, .track-row {
+  .cover-play, .transport button, .track-row {
     transition: background-color .22s ease, color .22s ease, border-color .22s ease, opacity .22s ease, transform .22s cubic-bezier(.2,.8,.2,1);
   }
 }
