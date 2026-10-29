@@ -41,64 +41,85 @@ function currentIndex(time) {
   return index;
 }
 
+// Duración y posición de una pista lógica dentro del archivo continuo.
+function trackWindow(index = activeIndex) {
+  const total = usableDuration();
+  if (!album || !total || index < 0 || !album.tracks[index]) return null;
+  const start = album.tracks[index].start;
+  const next = album.tracks[index + 1]?.start ?? total;
+  const end = Math.max(start, Math.min(total, next));
+  return { start, end, duration: Math.max(0, end - start) };
+}
+
+function mediaArtwork() {
+  const source = album.mediaArtwork || album.cover;
+  const url = new URL(source, location.href);
+  const ext = url.pathname.toLowerCase().split(".").pop();
+  const type = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", webp: "image/webp" }[ext] || "image/png";
+  const artwork = { src: url.href, type };
+  // El PNG de prueba es de 128 × 128 para evitar errores de renderizado en iOS.
+  if (source.endsWith("cover-128.png")) artwork.sizes = "128x128";
+  return [artwork];
+}
+
 function mediaMetadata() {
-  if (!album || !("mediaSession" in navigator)) return;
+  if (!album || !("mediaSession" in navigator) || typeof MediaMetadata === "undefined") return;
   const track = album.tracks[activeIndex < 0 ? 0 : activeIndex];
 
-  if (typeof MediaMetadata !== "undefined") {
-    const art = new URL(album.cover, location.href);
+  try {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: track.title,
       artist: album.artist,
       album: album.title,
-      artwork: [{ src: art.href, type: art.pathname.toLowerCase().endsWith(".svg") ? "image/svg+xml" : "image/jpeg" }]
+      artwork: mediaArtwork()
     });
+  } catch (error) {
+    console.warn("No se pudieron actualizar los metadatos", error);
   }
   navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
 }
 
 function mediaPosition() {
   if (!("mediaSession" in navigator) || !("setPositionState" in navigator.mediaSession)) return;
-  const duration = usableDuration();
-  if (!duration) return;
+  const window = trackWindow();
+  if (!window || window.duration <= 0) return;
   try {
+    // La plataforma recibe el tiempo de la pista, no el del archivo completo.
+    // Safari puede ignorarlo y mostrar la duración total del elemento <audio>.
     navigator.mediaSession.setPositionState({
-      duration,
+      duration: window.duration,
       playbackRate: audio.playbackRate,
-      position: Math.max(0, Math.min(audio.currentTime, duration))
+      position: Math.max(0, Math.min(audio.currentTime - window.start, window.duration))
     });
   } catch {
-    // Algunas implementaciones rechazan estado de posición.
+    // La compatibilidad con setPositionState varía entre navegadores.
   }
 }
 
 function update() {
-  const duration = usableDuration();
-  const ready = duration > 0;
+  const total = usableDuration();
+  const ready = total > 0;
   const time = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+
+  const nextIndex = currentIndex(time);
+  const changed = nextIndex !== activeIndex;
+  activeIndex = nextIndex;
+  const window = trackWindow();
+  const trackDuration = window?.duration || 0;
+  const trackElapsed = window ? Math.max(0, Math.min(time - window.start, trackDuration)) : 0;
 
   const isPlaying = !audio.paused && !audio.ended;
   playButton.disabled = !album;
   coverPlayButton.disabled = !album;
   previousButton.disabled = !ready;
-  nextButton.disabled = !ready;
+  nextButton.disabled = !ready || !album || activeIndex >= album.tracks.length - 1;
   seek.disabled = !ready;
   playButton.classList.toggle("is-playing", isPlaying);
   coverPlayButton.classList.toggle("is-playing", isPlaying);
   playButton.setAttribute("aria-label", isPlaying ? "Pausar" : "Reproducir");
   coverPlayButton.setAttribute("aria-label", isPlaying ? "Pausar álbum" : "Reproducir álbum");
 
-  byId("duration").textContent = clock(duration);
-  if (!scrubbing) {
-    byId("elapsed").textContent = clock(time);
-    seek.max = duration || 100;
-    seek.value = ready ? Math.max(0, Math.min(time, duration)) : 0;
-    seek.style.setProperty("--progress", (ready ? Math.min(100, Math.max(0, time / duration * 100)) : 0) + "%");
-  }
-
-  const nextIndex = currentIndex(time);
-  if (nextIndex !== activeIndex) {
-    activeIndex = nextIndex;
+  if (changed) {
     if (album && activeIndex >= 0) {
       byId("current-track").textContent = album.tracks[activeIndex].title;
     }
@@ -111,8 +132,16 @@ function update() {
     mediaMetadata();
   }
 
+  byId("duration").textContent = clock(trackDuration);
+  if (!scrubbing) {
+    byId("elapsed").textContent = clock(trackElapsed);
+    seek.max = trackDuration || 100;
+    seek.value = ready ? trackElapsed : 0;
+    seek.style.setProperty("--progress", (trackDuration ? Math.min(100, trackElapsed / trackDuration * 100) : 0) + "%");
+  }
+
   if ("mediaSession" in navigator) {
-    navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
+    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }
   mediaPosition();
 }
@@ -159,6 +188,14 @@ function seekTo(position) {
   if (!usableDuration()) return;
   audio.currentTime = Math.max(0, Math.min(position, usableDuration()));
   update();
+}
+
+function seekWithinTrack(position) {
+  const window = trackWindow();
+  if (!window || !Number.isFinite(position)) return;
+  // Evita que el seek se desplace al tema siguiente de forma accidental.
+  const last = Math.max(window.start, window.end - 0.05);
+  seekTo(Math.max(window.start, Math.min(window.start + position, last)));
 }
 
 function jumpTo(index) {
@@ -217,20 +254,27 @@ function enableTracks() {
 
 function installMediaSession() {
   if (!("mediaSession" in navigator)) return;
+  const session = navigator.mediaSession;
   const actions = {
     play: () => { void play(); },
     pause: () => audio.pause(),
     previoustrack: previous,
     nexttrack: next,
     seekto: (details) => {
-      if (Number.isFinite(details.seekTime)) seekTo(details.seekTime);
-    },
-    seekbackward: (details) => seekTo(audio.currentTime - (details.seekOffset || 10)),
-    seekforward: (details) => seekTo(audio.currentTime + (details.seekOffset || 10))
+      // El sistema recibe la duración de cada pista lógica.
+      if (Number.isFinite(details.seekTime)) seekWithinTrack(details.seekTime);
+    }
   };
   for (const [action, handler] of Object.entries(actions)) {
-    try { navigator.mediaSession.setActionHandler(action, handler); }
+    try { session.setActionHandler(action, handler); }
     catch { /* Acción no disponible en este navegador. */ }
+  }
+
+  // En iOS los handlers ±10 s sustituyen los botones de pistas.
+  // Limpiar ambos y registrar de nuevo al evento "playing".
+  for (const action of ["seekbackward", "seekforward"]) {
+    try { session.setActionHandler(action, null); }
+    catch { /* Acción no disponible. */ }
   }
 }
 
@@ -252,6 +296,8 @@ function validateAlbum(raw) {
     artist: String(raw.artist || "Artista"),
     year: String(raw.year || ""),
     cover: typeof raw.cover === "string" && raw.cover ? raw.cover : "./cover.svg",
+    mediaArtwork: typeof raw.mediaArtwork === "string" && raw.mediaArtwork
+      ? raw.mediaArtwork : (raw.cover || "./cover.svg"),
     audio: typeof raw.audio === "string" && raw.audio ? raw.audio : null,
     tracks
   };
@@ -295,10 +341,11 @@ nextButton.addEventListener("click", next);
 seek.addEventListener("input", () => {
   scrubbing = true;
   byId("elapsed").textContent = clock(Number(seek.value));
-  seek.style.setProperty("--progress", (usableDuration() ? Number(seek.value) / usableDuration() * 100 : 0) + "%");
+  const duration = trackWindow()?.duration || 0;
+  seek.style.setProperty("--progress", (duration ? Number(seek.value) / duration * 100 : 0) + "%");
 });
 seek.addEventListener("change", () => {
-  seekTo(Number(seek.value));
+  seekWithinTrack(Number(seek.value));
   scrubbing = false;
   update();
 });
@@ -311,6 +358,12 @@ audio.addEventListener("loadedmetadata", () => {
 audio.addEventListener("timeupdate", update);
 audio.addEventListener("durationchange", () => { enableTracks(); update(); });
 audio.addEventListener("play", update);
+audio.addEventListener("playing", () => {
+  // Safari puede activar los botones externos solo tras iniciar audio real.
+  installMediaSession();
+  mediaMetadata();
+  update();
+});
 audio.addEventListener("pause", () => {
   update();
   if (!audio.ended && !startingPlayback) message("Pausado.");
