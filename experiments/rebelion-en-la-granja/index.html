@@ -371,6 +371,31 @@
       .causal-cell p { font-size:12px; }
     }
     @media (prefers-reduced-motion:reduce) { .slide-grid { scroll-behavior:auto; } }
+
+    /* Portada de bienvenida: se conserva la navegación vertical del lector. */
+    .cover-gesture { display:none; margin-top:clamp(25px,6dvh,58px); align-items:center; gap:16px; color:var(--accent); }
+    .cover-gesture .gesture-arrow { display:grid; place-items:center; width:54px; height:68px; flex:none; border:1px solid currentColor; border-radius:30px; font-size:36px; animation:slide-up 2s ease-in-out infinite; }
+    .cover-gesture .gesture-label { display:grid; gap:6px; font-size:clamp(11px,1.1vw,13px); font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .cover-gesture small { color:var(--muted); font-size:clamp(12px,1.3vw,15px); font-weight:400; letter-spacing:0; text-transform:none; }
+    .stage.is-cover .overline, .stage.is-cover .side, .stage.is-cover .interaction-row, .stage.is-cover .recall-line { display:none!important; }
+    .stage.is-cover .slide-grid { display:flex!important; align-items:center; justify-content:center; overflow-y:auto; padding:0; }
+    .stage.is-cover .main-idea { width:100%; max-width:900px; }
+    .stage.is-cover h1 { font-size:clamp(53px,8vw,112px); letter-spacing:-.075em; line-height:.99; overflow-wrap:normal; }
+    .stage.is-cover .summary { max-width:680px; font-size:clamp(18px,2vw,24px); line-height:1.38; }
+    .stage.is-cover .cover-gesture { display:flex; }
+    @keyframes slide-up { 0%,100% { transform:translateY(5px); opacity:.68; } 50% { transform:translateY(-7px); opacity:1; } }
+    @media(max-width:720px) {
+      .stage.is-cover h1 { font-size:clamp(49px,13.4vw,76px); }
+      .stage.is-cover .summary { font-size:clamp(16px,4.2vw,19px); margin-top:22px; }
+      .stage.is-cover .cover-gesture { margin-top:clamp(24px,6dvh,58px); gap:13px; }
+      .stage.is-cover .cover-gesture .gesture-arrow { width:48px; height:61px; font-size:32px; }
+    }
+    @media(max-width:720px) and (max-height:650px) {
+      .stage.is-cover h1 { font-size:clamp(43px,11.5vw,57px); }
+      .stage.is-cover .summary { font-size:15px; margin-top:15px; }
+      .stage.is-cover .cover-gesture { margin-top:19px; }
+    }
+    @media(prefers-reduced-motion:reduce) { .cover-gesture .gesture-arrow { animation:none; } }
   </style>
 </head>
 <body>
@@ -382,15 +407,16 @@
         <button type="button" class="plain-btn" id="openIndex" aria-haspopup="dialog">Índice <span aria-hidden="true">↗</span></button>
       </div>
     </header>
-    <div class="progress-track" role="progressbar" aria-label="Progreso de la lectura" aria-valuemin="1" aria-valuemax="13" aria-valuenow="1" id="progressTrack"><span class="progress-fill" id="progressFill"></span></div>
+    <div class="progress-track" role="progressbar" aria-label="Progreso de la lectura" aria-valuemin="1" aria-valuemax="15" aria-valuenow="1" id="progressTrack"><span class="progress-fill" id="progressFill"></span></div>
     <main class="stage" id="stage" tabindex="-1" aria-label="Lámina actual: desplázate verticalmente para avanzar o retroceder">
-      <div class="overline"><span class="section-id" id="sectionId">01 / 13</span><span id="source">George Orwell · Rebelión en la granja</span></div>
+      <div class="overline"><span class="section-id" id="sectionId">01 / 15</span><span id="source">George Orwell · Rebelión en la granja</span></div>
       <div class="slide-grid">
         <article class="main-idea">
           <p class="chapter-label" id="chapter">Mapa de lectura</p>
           <h1 id="slideTitle">De la emancipación a la obediencia.</h1>
           <p class="summary" id="summary"></p>
           <div class="recall-line"><span class="small-label">IDEA PARA<br>RETENER</span><p id="takeaway"></p></div>
+          <div class="cover-gesture" aria-label="Desliza el dedo hacia arriba para avanzar, como en Instagram"><span class="gesture-arrow" aria-hidden="true">↑</span><span class="gesture-label">Desliza hacia arriba<small>Como en Instagram · sube para avanzar</small></span></div>
         </article>
         <aside class="side" aria-label="Concepto y mecanismo">
           <div class="side-heading"><span>Clave conceptual</span><span class="mark" id="conceptNo">01</span></div>
@@ -408,18 +434,32 @@
     </main>
     <nav class="bottombar" aria-label="Navegación de láminas">
       <button class="arrow-btn" type="button" id="prev"><span class="arr" aria-hidden="true">↑</span><span>Anterior</span></button>
-      <span class="count" aria-live="polite"><strong id="current">01</strong> / <span id="totalCount">13</span></span>
+      <span class="count" aria-live="polite"><strong id="current">01</strong> / <span id="totalCount">15</span></span>
       <button class="arrow-btn arrow-next" type="button" id="next"><span>Siguiente</span><span class="arr" aria-hidden="true">↓</span></button>
     </nav>
     <footer class="footline"><p>RESUMEN ESCOLAR · 15 AÑOS · SPOILERS DE LA NOVELA</p><p>DESPLÁZATE HACIA ABAJO PARA AVANZAR · ↑ ↓ NAVEGACIÓN</p></footer>
   </div>
   <dialog id="indexDialog" aria-labelledby="dialogTitle">
-    <div class="dialog-head"><span id="dialogTitle">Mapa / 13 láminas</span><button class="plain-btn" id="closeIndex" type="button">Cerrar ×</button></div>
+    <div class="dialog-head"><span id="dialogTitle">Mapa / 15 láminas</span><button class="plain-btn" id="closeIndex" type="button">Cerrar ×</button></div>
     <nav class="dialog-list" id="jumpList" aria-label="Ir a una lámina"></nav>
   </dialog>
   <script>
     "use strict";
     const slides = [
+  {
+    "cover": true,
+    "chapter": "GUÍA DE REPASO / GEORGE ORWELL",
+    "title": "Rebelión en la granja.",
+    "summary": "La historia, sus personajes y las ideas centrales en 15 láminas con apuntes y preguntas de repaso.",
+    "takeaway": "",
+    "concept": "",
+    "before": "",
+    "after": "",
+    "note": "",
+    "question": "",
+    "answer": "",
+    "source": "PODER · IGUALDAD · PROPAGANDA · LIBERTAD"
+  },
   {
     "chapter": "01 / Panorama",
     "title": "¿De qué trata la historia?",
@@ -434,46 +474,59 @@
     "source": "NOVELA / CAPÍTULOS I–X"
   },
   {
-    "chapter": "02 / Personajes",
-    "title": "¿Quién es quién?",
-    "summary": "No necesitas memorizar todos los animales. Recuerda a quienes impulsan la rebelión, toman decisiones, difunden las órdenes y realizan el trabajo.",
-    "takeaway": "Mayor imagina la libertad; Napoleón concentra el poder; Snowball es expulsado; Squealer justifica; Boxer obedece y trabaja.",
-    "concept": "Cinco personajes clave.",
-    "before": "Mayor: propone rebelarse. Snowball: organiza y debate.",
-    "after": "Napoleón: dirige. Squealer: convence. Boxer: trabaja.",
-    "note": "También importa Jones: es el humano que explotaba a los animales antes de la rebelión. Los perros sirven de fuerza policial para Napoleón; las ovejas repiten consignas; Clover sospecha que las cosas no van bien; Benjamín entiende mucho, pero interviene poco.",
-    "question": "¿Qué diferencia hay entre Napoleón y Squealer?",
-    "answer": "Napoleón toma las decisiones y controla la fuerza. Squealer utiliza discursos y explicaciones para que los demás las acepten.",
+    "chapter": "02 / Personajes principales",
+    "title": "Quiénes son y qué hacen.",
+    "summary": "Viejo Mayor inspira la rebelión contra Jones. Snowball organiza la granja y propone el molino. Napoleón lo expulsa y concentra el poder. Squealer difunde la propaganda. Boxer trabaja hasta el agotamiento y termina traicionado.",
+    "takeaway": "Mayor: ideas. Jones: explotación. Snowball: proyecto rival. Napoleón: dictadura. Squealer: propaganda. Boxer: trabajo.",
+    "concept": "Seis figuras centrales.",
+    "before": "Mayor denuncia la injusticia; Jones es el dueño expulsado; Snowball propone cambios.",
+    "after": "Napoleón gobierna por la fuerza; Squealer lo justifica; Boxer sostiene la granja.",
+    "note": "El Viejo Mayor muere antes de la rebelión. Jones pierde la granja tras descuidar a los animales. Snowball organiza su defensa contra los humanos, pero Napoleón lo expulsa con perros entrenados en secreto. Squealer convierte las decisiones del líder en discursos persuasivos. Boxer cree en la revolución hasta que los cerdos lo traicionan.",
+    "question": "¿Quién controla la fuerza, quién controla el discurso y quién representa el trabajo?",
+    "answer": "Napoleón controla la fuerza mediante los perros; Squealer controla el discurso mediante la propaganda; Boxer representa el trabajo y la lealtad explotada.",
     "source": "NOVELA / PERSONAJES PRINCIPALES"
   },
   {
-    "chapter": "03 / El origen",
+    "chapter": "03 / Personajes secundarios",
+    "title": "Quiénes apoyan, dudan y resisten.",
+    "summary": "Clover advierte que la igualdad prometida no se cumple. Benjamín comprende más de lo que dice y descubre el destino de Boxer. Los perros ejecutan las órdenes de Napoleón; las ovejas repiten consignas que dificultan el debate.",
+    "takeaway": "Clover: preocupación. Benjamín: memoria y dudas. Perros: represión. Ovejas: repetición de propaganda.",
+    "concept": "Diferentes respuestas al poder.",
+    "before": "Clover observa los abusos; Benjamín sabe leer; Muriel ayuda a revisar las normas.",
+    "after": "Los perros intimidan y las ovejas repiten consignas; las dudas no detienen al líder.",
+    "note": "Clover es una yegua protectora que percibe la distancia entre las promesas y la realidad. Benjamín, el burro, lee el vehículo que se lleva a Boxer, aunque suele permanecer pasivo. Muriel, la cabra, también sabe leer. Mollie abandona la granja por su apego al azúcar y los lazos. Moses, el cuervo, habla de una recompensa después de la muerte. Los granjeros Frederick y Pilkington negocian y se enfrentan con los cerdos.",
+    "question": "¿Cómo se diferencian Benjamín y las ovejas ante las decisiones de Napoleón?",
+    "answer": "Benjamín comprende y duda, pero interviene poco. Las ovejas repiten las consignas oficiales sin cuestionarlas.",
+    "source": "NOVELA / PERSONAJES SECUNDARIOS"
+  },
+  {
+    "chapter": "04 / El origen",
     "title": "¿Por qué se rebelan?",
     "summary": "El Viejo Mayor les dice a los animales que su vida es injusta: trabajan, pasan hambre y el señor Jones se queda con lo que producen. Les propone una granja sin humanos ni explotación.",
     "takeaway": "La rebelión nace de una situación real de abuso: trabajar mucho sin disfrutar del fruto del esfuerzo.",
     "concept": "Explotación.",
     "before": "Jones decide y se queda con los beneficios.",
     "after": "Los animales desean producir para sí mismos.",
-    "note": "El Viejo Mayor muere antes de la rebelión. Su discurso inspira las ideas llamadas Animalismo. Importante: denunciar a un explotador no explica todavía cómo evitar que aparezca otro dirigente abusivo.",
+    "note": "El Viejo Mayor muere antes de la rebelión. Su discurso inspira las ideas llamadas Animalismo. denunciar a un explotador no explica todavía cómo evitar que aparezca otro dirigente abusivo.",
     "question": "¿Cuál es la injusticia que denuncia el Viejo Mayor?",
     "answer": "Que los animales producen alimentos y riqueza, pero Jones se apropia de casi todo y les deja apenas lo necesario para sobrevivir.",
     "source": "NOVELA / CAPÍTULO I"
   },
   {
-    "chapter": "04 / La rebelión",
+    "chapter": "05 / La rebelión",
     "title": "Los animales toman la granja.",
     "summary": "Jones descuida a los animales y estos lo expulsan. Cambian el nombre de Granja Manor por Granja Animal y escriben siete mandamientos para vivir con nuevas reglas.",
     "takeaway": "La norma más importante promete que todos los animales serán iguales.",
     "concept": "Siete mandamientos.",
     "before": "Un humano manda sobre los animales.",
     "after": "La granja promete igualdad y reglas comunes.",
-    "note": "Entre las reglas están: no usar ropa, no dormir en camas, no beber alcohol y no matar a otro animal. Los cerdos, que saben leer y escribir mejor, redactan los mandamientos. Esto será importante: quien controla las palabras escritas también puede cambiarlas.",
+    "note": "Entre las reglas están: no usar ropa, no dormir en camas, no beber alcohol y no matar a otro animal. Los cerdos, que saben leer y escribir mejor, redactan los mandamientos. quien controla las palabras escritas también puede cambiarlas.",
     "question": "¿Para qué sirven los siete mandamientos?",
     "answer": "Para fijar los principios de la rebelión y evitar que los animales adopten las costumbres y abusos de los humanos.",
     "source": "NOVELA / CAPÍTULO II"
   },
   {
-    "chapter": "05 / Primer abuso",
+    "chapter": "06 / Primer abuso",
     "title": "La igualdad empieza a romperse.",
     "summary": "Aunque todos deberían recibir un trato justo, los cerdos guardan para ellos la leche y las manzanas. Squealer asegura que necesitan esos alimentos para pensar y dirigir la granja.",
     "takeaway": "El primer privilegio se presenta como algo necesario para el bien de todos.",
@@ -486,7 +539,7 @@
     "source": "NOVELA / CAPÍTULOS III–IV"
   },
   {
-    "chapter": "06 / La disputa",
+    "chapter": "07 / La disputa",
     "title": "Napoleón elimina a Snowball.",
     "summary": "Snowball propone construir un molino para mejorar la vida en la granja. Napoleón se opone, pero después utiliza a unos perros entrenados en secreto para expulsarlo. Desde entonces se acaba la discusión en las asambleas.",
     "takeaway": "Napoleón deja de convencer mediante argumentos: ahora manda gracias al miedo.",
@@ -499,20 +552,20 @@
     "source": "NOVELA / CAPÍTULO V"
   },
   {
-    "chapter": "07 / El molino",
+    "chapter": "08 / El molino",
     "title": "Prometen descanso, exigen más trabajo.",
     "summary": "El molino debía facilitar la vida con electricidad y máquinas. Pero su construcción exige sacrificios enormes, sufre destrucciones y debe reconstruirse. El descanso prometido nunca llega.",
     "takeaway": "El proyecto que iba a mejorar la vida termina sirviendo para pedir más esfuerzo.",
     "concept": "Promesa incumplida.",
     "before": "El molino significaba menos trabajo.",
     "after": "Los animales trabajan más y esperan sin resultados.",
-    "note": "Napoleón termina defendiendo el molino que antes había rechazado. En el final, el molino se usa para moler maíz y obtener dinero, no para entregar la electricidad y comodidad anunciadas. Recuerda la diferencia entre construir algo y cumplir el objetivo original.",
+    "note": "Napoleón termina defendiendo el molino que antes había rechazado. En el final, el molino se usa para moler maíz y obtener dinero, no para entregar la electricidad y comodidad anunciadas. Construir el molino no equivale a cumplir la promesa original.",
     "question": "¿Por qué el molino es importante para entender el poder de Napoleón?",
     "answer": "Porque el líder utiliza una promesa de progreso para exigir sacrificios, aunque los beneficios no llegan a los animales.",
     "source": "NOVELA / CAPÍTULOS V–VIII Y X"
   },
   {
-    "chapter": "08 / El miedo",
+    "chapter": "09 / El miedo",
     "title": "Todo fracaso tiene un culpable.",
     "summary": "Napoleón acusa a Snowball, ya expulsado, de causar problemas y sabotajes. Después ordena que varios animales confiesen supuestas traiciones y los perros los matan.",
     "takeaway": "Se inventa un enemigo para ocultar errores y justificar castigos.",
@@ -525,7 +578,7 @@
     "source": "NOVELA / CAPÍTULOS VI–VII"
   },
   {
-    "chapter": "09 / Propaganda",
+    "chapter": "10 / Propaganda",
     "title": "Squealer controla la versión de los hechos.",
     "summary": "Squealer habla en nombre de Napoleón. Usa cifras difíciles de comprobar, cambia la manera de contar los problemas y advierte que Jones podría regresar si alguien desobedece.",
     "takeaway": "La propaganda no solo miente: también decide qué información se muestra y cómo se interpreta.",
@@ -538,7 +591,7 @@
     "source": "NOVELA / CAPÍTULOS III–X"
   },
   {
-    "chapter": "10 / Las reglas",
+    "chapter": "11 / Las reglas",
     "title": "Cambian las normas sin avisar.",
     "summary": "Los cerdos comienzan a dormir en camas, beber alcohol y matar animales. Para justificarlo, aparecen cambios en las reglas escritas: se agregan condiciones que antes no existían.",
     "takeaway": "Si nadie conserva el texto original, el poder puede cambiar una regla y afirmar que siempre fue así.",
@@ -551,7 +604,7 @@
     "source": "NOVELA / CAPÍTULOS VI–IX"
   },
   {
-    "chapter": "11 / Boxer",
+    "chapter": "12 / Boxer",
     "title": "El animal más trabajador es traicionado.",
     "summary": "Boxer, el caballo, se esfuerza hasta quedar agotado. Siempre cree que debe trabajar más y confiar en Napoleón. Cuando ya no puede trabajar, lo llevan en un vehículo de un matarife.",
     "takeaway": "Ser leal y trabajador no basta para estar protegido frente a un poder injusto.",
@@ -564,7 +617,7 @@
     "source": "NOVELA / CAPÍTULO IX"
   },
   {
-    "chapter": "12 / El final",
+    "chapter": "13 / El final",
     "title": "Los cerdos se vuelven como los humanos.",
     "summary": "Los cerdos caminan en dos patas, usan látigos y negocian con los granjeros. La granja recupera su antiguo nombre. Al mirar por la ventana, los animales ya no pueden distinguir entre cerdos y humanos.",
     "takeaway": "La rebelión fracasa cuando sus dirigentes se comportan como los antiguos opresores.",
@@ -577,14 +630,14 @@
     "source": "NOVELA / CAPÍTULO X"
   },
   {
-    "chapter": "13 / Repaso final",
+    "chapter": "14 / Repaso final",
     "title": "¿Qué nos quiere mostrar Orwell?",
     "summary": "La novela enseña que una causa justa puede terminar mal si nadie controla a los dirigentes, si se castiga la crítica y si las palabras se usan para ocultar los hechos. El prólogo «La libertad de prensa» insiste en la importancia de poder decir ideas incómodas.",
     "takeaway": "Para recordar: poder sin control + miedo + propaganda + memoria manipulada = pérdida de libertad.",
     "concept": "Pensamiento crítico.",
     "before": "Hacer preguntas, comprobar hechos y discutir.",
     "after": "Repetir consignas y obedecer sin pensar.",
-    "note": "En esta edición, Bernard Crick explica las dificultades para publicar la obra, y Orwell critica la autocensura: callar por temor a la opinión de otros. No todo desacuerdo es traición. Preguntas finales de estudio: ¿qué querían cambiar?, ¿cuándo comenzaron los abusos?, ¿cómo convencieron a los demás?, ¿qué pasó con Boxer?, ¿qué demuestra el final?",
+    "note": "En esta edición, Bernard Crick explica las dificultades para publicar la obra, y Orwell critica la autocensura: callar por temor a la opinión de otros. No todo desacuerdo es traición. El recorrido de los personajes permite conectar las primeras promesas con los privilegios, la propaganda y el desenlace.",
     "question": "Explica en tres pasos cómo Napoleón mantiene su poder.",
     "answer": "1. Elimina a su rival con los perros. 2. Usa miedo y propaganda para evitar críticas. 3. Cambia las reglas y el pasado para justificar sus privilegios.",
     "source": "NOVELA / I–X · «LA LIBERTAD DE PRENSA»"
@@ -606,6 +659,7 @@
     function render(index, shouldFocus) {
       position = legalPosition(index);
       const slide = slides[position];
+      stage.classList.toggle("is-cover", slide.cover === true);
       const n = twoDigits(position + 1);
       document.title = n + "/" + slides.length + " — Rebelión en la granja / LAB";
       byId("sectionId").textContent = n + " / " + slides.length;
@@ -750,14 +804,8 @@
       const index = fromHash();
       if (index !== null && index !== position) render(index, true);
     });
-    let initial = fromHash();
-    if (initial === null) {
-      try {
-        const stored = Number(localStorage.getItem("lab-orwell-slide-v1"));
-        if (Number.isInteger(stored) && stored >= 0 && stored < slides.length) initial = stored;
-      } catch (_) {}
-    }
-    render(initial === null ? 0 : initial, false);
+    // Al abrir la URL sin fragmento, mostrar siempre la portada.
+    render(fromHash() ?? 0, false);
   </script>
 </body>
 </html>
