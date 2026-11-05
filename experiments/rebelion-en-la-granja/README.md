@@ -20,11 +20,13 @@ Presentación web de **13 láminas**, adaptada como resumen de estudio para lect
 12. El desenlace de la novela.
 13. Repaso final y libertad de prensa.
 
+En teléfonos, los apuntes y las preguntas se abren en un panel inferior de ancho completo, sin comprimir el contenido en columnas estrechas.
+
 Cada lámina contiene: un resumen breve de lo que ocurre, una idea clave para memorizar, un concepto explicado sin tecnicismos innecesarios, un contraste antes/después, un apunte desplegable y una pregunta con respuesta oculta. Se indican los capítulos de la novela que permiten volver al texto.
 
 ## Uso
 
-Abrir [index.html](./index.html) en un navegador. Funciona sin dependencias, build, cuentas ni peticiones externas. Navegación por botones, índice, flechas del teclado, Inicio/Fin, **swipe táctil horizontal** y arrastre horizontal con mouse. El desplazamiento vertical para leer se mantiene disponible. Guarda localmente la última lámina visitada; la URL permite compartir una posición con fragmentos `#01` a `#10`.
+Abrir [index.html](./index.html) en un navegador. Funciona sin dependencias, build, cuentas ni peticiones externas. Navegación por botones, índice, flechas arriba/abajo del teclado, Inicio/Fin, **swipe táctil vertical** y desplazamiento con rueda/trackpad. Deslizar hacia arriba (avanzar hacia abajo en la lectura) lleva a la lámina siguiente; deslizar hacia abajo vuelve a la anterior. Si el contenido no cabe en la pantalla, primero se desplaza internamente y, al llegar al extremo, permite pasar de lámina. La interfaz ocupa **100dvh** y no mueve el documento completo. Guarda localmente la última lámina visitada; la URL permite compartir una posición con fragmentos `#01` a `#10`.
 
 ## Criterio editorial
 
