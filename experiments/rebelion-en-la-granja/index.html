@@ -202,6 +202,175 @@
       .bottombar { min-height:75px; }
       .arrow-btn { font-size:10px; }
     }
+
+    /* V3: presentación en alto de viewport, lectura vertical y apuntes a ancho completo. */
+    html, body { height:100%; overflow:hidden; overscroll-behavior:none; }
+    .shell {
+      height:100vh;
+      height:100dvh;
+      min-height:0;
+      max-height:100dvh;
+      overflow:hidden;
+      padding-inline:clamp(16px,4vw,58px);
+    }
+    .topbar {
+      flex:0 0 auto;
+      min-height:clamp(52px,7dvh,70px);
+    }
+    .progress-track { flex:0 0 3px; }
+    .stage, .stage:focus, .stage:focus-visible {
+      outline:none;
+      outline-offset:0;
+    }
+    .stage {
+      flex:1 1 auto;
+      min-height:0;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      padding:clamp(12px,2.3dvh,26px) 0 0;
+      touch-action:pan-y;
+    }
+    .overline { flex:0 0 auto; }
+    .slide-grid {
+      flex:1 1 auto;
+      min-height:0;
+      overflow-y:auto;
+      overscroll-behavior-y:contain;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin;
+      align-items:start;
+      padding:clamp(16px,2.5dvh,35px) 0 clamp(14px,2dvh,26px);
+    }
+    .interaction-row {
+      flex:0 0 auto;
+      margin-top:0;
+      position:relative;
+    }
+    .bottombar {
+      flex:0 0 auto;
+      min-height:clamp(58px,8dvh,74px);
+      padding-bottom:env(safe-area-inset-bottom,0px);
+    }
+    .footline { display:none; }
+    .arr { line-height:1; }
+    @media (max-width:920px) {
+      .slide-grid { display:flex; flex-direction:column; gap:clamp(15px,2.5dvh,25px); }
+      .side { width:100%; }
+    }
+    @media (max-width:720px) {
+      .topbar { min-height:52px; font-size:10px; }
+      .stage { padding-top:13px; }
+      .overline {
+        display:flex;
+        flex-direction:row;
+        flex-wrap:wrap;
+        gap:3px 10px;
+        font-size:9px;
+      }
+      .overline span:last-child {
+        text-align:right;
+        max-width:75%;
+        margin-left:auto;
+      }
+      .slide-grid {
+        padding:clamp(12px,2.3dvh,18px) 1px 13px;
+        gap:clamp(13px,2.3dvh,20px);
+      }
+      .chapter-label { font-size:10px; letter-spacing:.12em; margin-bottom:7px; }
+      h1 {
+        font-size:clamp(28px, min(8.6vw, 5.4dvh), 42px);
+        line-height:1.06;
+        letter-spacing:-.05em;
+        overflow-wrap:normal;
+        hyphens:auto;
+      }
+      .summary {
+        margin-top:clamp(10px,1.8dvh,16px);
+        font-size:clamp(13.5px,3.8vw,16px);
+        line-height:1.37;
+        letter-spacing:-.008em;
+      }
+      .recall-line {
+        display:grid;
+        grid-template-columns:minmax(58px,22%) minmax(0,1fr);
+        gap:11px;
+        margin-top:clamp(12px,2dvh,17px);
+        padding-top:10px;
+      }
+      .small-label { font-size:9px; letter-spacing:.07em; }
+      .recall-line p { font-size:clamp(13px,3.65vw,15px); line-height:1.36; }
+      .side { display:block; border-top:1px solid var(--line); padding-top:11px; }
+      .side-heading { display:none; }
+      .concept { margin:0 0 12px; font-size:clamp(20px,5vw,25px); line-height:1.2; }
+      .causal {
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+        gap:14px;
+        border:0;
+        margin:0;
+      }
+      .causal-cell { padding:0; border:0; }
+      .causal-cell span { font-size:9px; letter-spacing:.08em; line-height:1.3; }
+      .causal-cell p { font-size:clamp(12px,3.25vw,14px); line-height:1.35; margin:5px 0 0; }
+      .interaction-row {
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+        gap:1px;
+        min-height:52px;
+        border-top:1px solid var(--ink);
+      }
+      .interaction-row details { position:static; min-width:0; }
+      .interaction-row details summary,
+      .interaction-row details:nth-child(2) summary {
+        min-height:52px;
+        height:100%;
+        padding:12px 10px;
+        align-items:center;
+        gap:8px;
+        font-size:10px;
+        line-height:1.25;
+        letter-spacing:.04em;
+      }
+      .interaction-row details:first-child summary { padding-left:0; }
+      .interaction-row details[open] { background:var(--paper); }
+      .interaction-row details[open] .detail-body {
+        position:absolute;
+        z-index:5;
+        left:0;
+        right:0;
+        bottom:100%;
+        width:100%;
+        max-width:none;
+        max-height:min(66dvh, calc(100dvh - 180px));
+        overflow-y:auto;
+        -webkit-overflow-scrolling:touch;
+        overscroll-behavior:contain;
+        padding:clamp(18px,4vw,30px);
+        border:1px solid var(--ink);
+        border-bottom:0;
+        background:var(--white);
+        box-shadow:0 -12px 35px rgba(0,0,0,.12);
+        font-size:clamp(15px,3.9vw,17px);
+        line-height:1.48;
+      }
+      .detail-body p { margin:0; }
+      .detail-body .prompt { margin-bottom:10px; }
+      .answer-btn { min-height:44px; }
+      .bottombar { min-height:calc(58px + env(safe-area-inset-bottom,0px)); }
+      .arrow-btn { font-size:10px; }
+    }
+    @media (max-width:720px) and (max-height:690px) {
+      .stage { padding-top:8px; }
+      .slide-grid { padding-top:9px; gap:10px; }
+      h1 { font-size:clamp(27px, 7.9vw, 35px); }
+      .summary { margin-top:9px; font-size:13.5px; line-height:1.31; }
+      .recall-line { margin-top:9px; padding-top:8px; }
+      .side { padding-top:8px; }
+      .concept { margin-bottom:7px; font-size:20px; }
+      .causal-cell p { font-size:12px; }
+    }
+    @media (prefers-reduced-motion:reduce) { .slide-grid { scroll-behavior:auto; } }
   </style>
 </head>
 <body>
@@ -214,7 +383,7 @@
       </div>
     </header>
     <div class="progress-track" role="progressbar" aria-label="Progreso de la lectura" aria-valuemin="1" aria-valuemax="13" aria-valuenow="1" id="progressTrack"><span class="progress-fill" id="progressFill"></span></div>
-    <main class="stage" id="stage" tabindex="-1" aria-label="Lámina actual: desliza horizontalmente para avanzar o retroceder">
+    <main class="stage" id="stage" tabindex="-1" aria-label="Lámina actual: desplázate verticalmente para avanzar o retroceder">
       <div class="overline"><span class="section-id" id="sectionId">01 / 13</span><span id="source">George Orwell · Rebelión en la granja</span></div>
       <div class="slide-grid">
         <article class="main-idea">
@@ -238,11 +407,11 @@
       </div>
     </main>
     <nav class="bottombar" aria-label="Navegación de láminas">
-      <button class="arrow-btn" type="button" id="prev"><span class="arr" aria-hidden="true">←</span><span>Anterior</span></button>
+      <button class="arrow-btn" type="button" id="prev"><span class="arr" aria-hidden="true">↑</span><span>Anterior</span></button>
       <span class="count" aria-live="polite"><strong id="current">01</strong> / <span id="totalCount">13</span></span>
-      <button class="arrow-btn arrow-next" type="button" id="next"><span>Siguiente</span><span class="arr" aria-hidden="true">→</span></button>
+      <button class="arrow-btn arrow-next" type="button" id="next"><span>Siguiente</span><span class="arr" aria-hidden="true">↓</span></button>
     </nav>
-    <footer class="footline"><p>RESUMEN ESCOLAR · 15 AÑOS · SPOILERS DE LA NOVELA</p><p>DESLIZA ← → PARA CAMBIAR · TAMBIÉN PUEDES USAR LAS FLECHAS</p></footer>
+    <footer class="footline"><p>RESUMEN ESCOLAR · 15 AÑOS · SPOILERS DE LA NOVELA</p><p>DESPLÁZATE HACIA ABAJO PARA AVANZAR · ↑ ↓ NAVEGACIÓN</p></footer>
   </div>
   <dialog id="indexDialog" aria-labelledby="dialogTitle">
     <div class="dialog-head"><span id="dialogTitle">Mapa / 13 láminas</span><button class="plain-btn" id="closeIndex" type="button">Cerrar ×</button></div>
@@ -423,9 +592,11 @@
 ];
     const byId = (id) => document.getElementById(id);
     const stage = byId("stage");
+    const contentScroller = document.querySelector(".slide-grid");
     const dialog = byId("indexDialog");
     const jumpList = byId("jumpList");
     let position = 0;
+    let lastInputMode = "pointer";
     const twoDigits = (number) => String(number).padStart(2, "0");
     const legalPosition = (number) => Math.min(slides.length - 1, Math.max(0, number));
     function fromHash() {
@@ -466,10 +637,9 @@
       });
       history.replaceState(null, "", "#"+n);
       try { localStorage.setItem("lab-orwell-slide-v1", String(position)); } catch (_) {}
-      if (shouldFocus) {
-        window.scrollTo({top: 0, behavior: "instant"});
-        stage.focus({preventScroll: true});
-      }
+      // Reiniciar solo el contenido desplazable; no se desplaza la página ni se dibuja marco de foco.
+      contentScroller.scrollTop = 0;
+      if (shouldFocus && lastInputMode === "keyboard") stage.focus({preventScroll: true});
     }
     function navigate(delta) { render(position + delta, true); }
     slides.forEach((slide, index) => {
@@ -496,47 +666,86 @@
       byId("revealAnswer").textContent = visible ? "Revelar respuesta" : "Ocultar respuesta";
       byId("revealAnswer").setAttribute("aria-expanded", String(!visible));
     });
+    // Navegación de lectura vertical (las flechas horizontales antiguas siguen disponibles).
     document.addEventListener("keydown", (event) => {
       if (dialog.open || event.altKey || event.ctrlKey || event.metaKey) return;
       if (/^(INPUT|TEXTAREA|SELECT|BUTTON|SUMMARY)$/.test(document.activeElement.tagName)) return;
-      if (event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); navigate(1); }
-      if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); navigate(-1); }
+      lastInputMode = "keyboard";
+      if (event.key === "ArrowDown" || event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); navigate(1); }
+      if (event.key === "ArrowUp" || event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); navigate(-1); }
       if (event.key === "Home") { event.preventDefault(); render(0, true); }
       if (event.key === "End") { event.preventDefault(); render(slides.length - 1, true); }
     });
 
-    // Swipe móvil: desplazamiento horizontal deliberado sin bloquear el scroll vertical.
+
+    // En lectura convencional, desplazar hacia abajo (dedo hacia arriba) avanza.
+    // Si una lámina excede el alto útil, primero se desplaza su contenido,
+    // y solo al llegar a su extremo se cambia de lámina.
+    function scrollable() { return contentScroller.scrollHeight > contentScroller.clientHeight + 4; }
+    function atScrollEdge(direction, startTop) {
+      if (!scrollable()) return true;
+      const limit = contentScroller.scrollHeight - contentScroller.clientHeight;
+      return direction > 0 ? startTop >= limit - 3 : startTop <= 3;
+    }
+    const noteA = byId("readingNote"), noteB = byId("recallNote");
+    noteA.addEventListener("toggle", () => { if (noteA.open) noteB.open = false; });
+    noteB.addEventListener("toggle", () => { if (noteB.open) noteA.open = false; });
     let touchStart = null;
     stage.addEventListener("touchstart", (event) => {
+      lastInputMode = "pointer";
       if (event.touches.length !== 1 || event.target.closest("button, a, summary, details, input, textarea")) {
         touchStart = null;
         return;
       }
       const t = event.touches[0];
-      touchStart = {x:t.clientX, y:t.clientY};
+      touchStart = {x:t.clientX, y:t.clientY, scrollTop:contentScroller.scrollTop};
     }, {passive:true});
     stage.addEventListener("touchend", (event) => {
-      if (!touchStart || event.changedTouches.length !== 1) return;
+      if (!touchStart || event.changedTouches.length !== 1 || noteA.open || noteB.open) return;
       const t = event.changedTouches[0];
       const dx=t.clientX-touchStart.x, dy=t.clientY-touchStart.y;
+      const oldTop=touchStart.scrollTop;
       touchStart=null;
-      if (Math.abs(dx) >= 58 && Math.abs(dx) > Math.abs(dy)*1.35) navigate(dx<0 ? 1 : -1);
+      if (Math.abs(dy) < 54 || Math.abs(dy) < Math.abs(dx)*1.3) return;
+      const direction = dy < 0 ? 1 : -1;
+      if (atScrollEdge(direction, oldTop)) navigate(direction);
     }, {passive:true});
-    stage.addEventListener("touchcancel", () => {touchStart=null;}, {passive:true});
+    stage.addEventListener("touchcancel", () => { touchStart=null; }, {passive:true});
 
-    // Arrastrar con mouse permite probar el mismo gesto desde el computador.
-    let mouseStart=null;
+    // Rueda/trackpad: un gesto cambia una lámina, con amortiguación de eventos.
+    let lastWheelAt = 0;
+    stage.addEventListener("wheel", (event) => {
+      if (dialog.open || event.target.closest("details, button, a")) return;
+      lastInputMode = "pointer";
+      const delta = event.deltaY;
+      if (Math.abs(delta) < 7) return;
+      const direction = delta > 0 ? 1 : -1;
+      if (!atScrollEdge(direction, contentScroller.scrollTop)) return;
+      event.preventDefault();
+      const now = performance.now();
+      if (now - lastWheelAt < 650) return;
+      lastWheelAt = now;
+      navigate(direction);
+    }, {passive:false});
+
+    // El arrastre del mouse reproduce el gesto vertical sin interferir con enlaces.
+    let mouseStart = null;
     stage.addEventListener("pointerdown", (event) => {
-      if (event.pointerType!=="mouse" || event.button!==0 || event.target.closest("button, a, summary, details")) return;
-      mouseStart={x:event.clientX,y:event.clientY};
+      if (event.pointerType !== "mouse" || event.button !== 0 || event.target.closest("button, a, summary, details")) return;
+      lastInputMode = "pointer";
+      mouseStart = {x:event.clientX, y:event.clientY, scrollTop:contentScroller.scrollTop};
     });
     stage.addEventListener("pointerup", (event) => {
-      if (!mouseStart || event.pointerType!=="mouse") return;
+      if (!mouseStart || event.pointerType !== "mouse" || noteA.open || noteB.open) return;
       const dx=event.clientX-mouseStart.x, dy=event.clientY-mouseStart.y;
+      const startTop=mouseStart.scrollTop;
       mouseStart=null;
-      if(Math.abs(dx)>=110 && Math.abs(dx)>Math.abs(dy)*1.4) navigate(dx<0 ? 1 : -1);
+      if (Math.abs(dy) >= 90 && Math.abs(dy) > Math.abs(dx)*1.4) {
+        const direction = dy < 0 ? 1 : -1;
+        if (atScrollEdge(direction, startTop)) navigate(direction);
+      }
     });
-    stage.addEventListener("pointercancel",()=>{mouseStart=null;});
+    stage.addEventListener("pointercancel", () => { mouseStart=null; });
     window.addEventListener("hashchange", () => {
       const index = fromHash();
       if (index !== null && index !== position) render(index, true);
