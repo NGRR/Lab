@@ -9,7 +9,7 @@ Cada proyecto vive en su propia carpeta, con documentación, dependencias y lím
 | ID | Proyecto | Estado | Acceso |
 | --- | --- | --- | --- |
 | 001 | Album Player — reproductor web de disco continuo | Prototipo inicial | [Abrir carpeta](./experiments/album-player/) · [Documentación](./experiments/album-player/README.md) |
-| 002 | Rebelión en la granja — repaso interactivo (13 láminas, 15 años) | Publicado | [Abrir presentación](./experiments/rebelion-en-la-granja/) · [Documentación](./experiments/rebelion-en-la-granja/README.md) |
+| 002 | Rebelión en la granja — repaso interactivo (15 láminas, 15 años) | Publicado | [Abrir presentación](./experiments/rebelion-en-la-granja/) · [Documentación](./experiments/rebelion-en-la-granja/README.md) |
 
 ## Publicación web
 
