@@ -665,7 +665,7 @@
       byId("sectionId").textContent = n + " / " + slides.length;
       byId("conceptNo").textContent = n;
       byId("current").textContent = n;
-      byId("chapter").textContent = slide.chapter;
+      byId("chapter").textContent = slide.chapter.replace(/^\d{2}\s*\/\s*/, "");
       byId("slideTitle").textContent = slide.title;
       byId("summary").textContent = slide.summary;
       byId("takeaway").textContent = slide.takeaway;
