@@ -2,30 +2,33 @@
 
 **Experimento 002 · NGRR/Lab**
 
-Presentación web de diez láminas basada en *Rebelión en la granja*, de George Orwell, y en los paratextos incluidos en el PDF de referencia: el estudio de Bernard Crick sobre el prólogo y «La libertad de prensa», de Orwell.
+Presentación web de **13 láminas**, adaptada como resumen de estudio para lectores de 15 años, basada en *Rebelión en la granja*, de George Orwell, y en los paratextos incluidos en el PDF de referencia: el estudio de Bernard Crick sobre el prólogo y «La libertad de prensa», de Orwell.
 
 ## Contenidos
 
-1. Paradoja del poder.
-2. Explotación y diagnóstico del Viejo Mayor.
-3. Mandamientos, igualdad y primeros privilegios.
-4. Expulsión de Snowball y cancelación de la deliberación.
-5. Molino y promesa de bienestar postergada.
-6. Chivo expiatorio, purgas y terror.
-7. Propaganda, lenguaje y reescritura de normas.
-8. Boxer y explotación de la lealtad.
-9. Transformación de los cerdos y restauración del privilegio.
-10. Libertad de prensa y síntesis interpretativa.
+1. ¿De qué trata la historia?
+2. ¿Quién es quién? Personajes.
+3. ¿Por qué se rebelan los animales?
+4. La rebelión y los siete mandamientos.
+5. Los primeros privilegios de los cerdos.
+6. Napoleón expulsa a Snowball.
+7. El molino y las promesas que no se cumplen.
+8. El miedo y la figura del enemigo.
+9. Squealer y la propaganda.
+10. Los mandamientos reescritos.
+11. Boxer: lealtad y traición.
+12. El desenlace de la novela.
+13. Repaso final y libertad de prensa.
 
-Cada lámina incluye resumen, concepto, esquema antes/después, apunte ampliable, pregunta de recuperación y respuesta oculta. Los pasajes remiten a las páginas **del PDF utilizado**, no a una paginación universal del libro.
+Cada lámina contiene: un resumen breve de lo que ocurre, una idea clave para memorizar, un concepto explicado sin tecnicismos innecesarios, un contraste antes/después, un apunte desplegable y una pregunta con respuesta oculta. Se indican los capítulos de la novela que permiten volver al texto.
 
 ## Uso
 
-Abrir [index.html](./index.html) en un navegador. Funciona sin dependencias, build, cuentas ni peticiones externas. Navegación por botones, índice, flechas del teclado, Inicio/Fin y deslizamiento táctil. Guarda localmente la última lámina visitada; la URL permite compartir una posición con fragmentos `#01` a `#10`.
+Abrir [index.html](./index.html) en un navegador. Funciona sin dependencias, build, cuentas ni peticiones externas. Navegación por botones, índice, flechas del teclado, Inicio/Fin, **swipe táctil horizontal** y arrastre horizontal con mouse. El desplazamiento vertical para leer se mantiene disponible. Guarda localmente la última lámina visitada; la URL permite compartir una posición con fragmentos `#01` a `#10`.
 
 ## Criterio editorial
 
-Es una síntesis de estudio, no una sustitución del texto ni una edición de la obra. Distingue acontecimientos narrativos de interpretaciones. Contiene spoilers del desenlace. No se redistribuye el PDF original ni se reproduce el texto completo. Las citas cortas se usan exclusivamente para comparar conceptos, lemas y formulaciones centrales. La licencia general del repositorio no debe entenderse como licencia sobre la obra de Orwell o su traducción.
+Es una síntesis de repaso escolar, no una sustitución del texto ni una edición de la obra. Distingue acontecimientos narrativos de interpretaciones. Contiene spoilers del desenlace. No se redistribuye el PDF original ni se reproduce el texto completo. Las citas cortas se usan exclusivamente para comparar conceptos, lemas y formulaciones centrales. La licencia general del repositorio no debe entenderse como licencia sobre la obra de Orwell o su traducción.
 
 ## Archivos
 
