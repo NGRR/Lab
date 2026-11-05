@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#efede7">
+  <meta name="description" content="Rebelión en la granja: lectura crítica interactiva en diez láminas, con apuntes, conceptos y preguntas de recuerdo.">
+  <title>Rebelión en la granja — Lectura interactiva / LAB</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #efede7;
+      --paper2: #e6e2d9;
+      --ink: #191918;
+      --muted: #696963;
+      --line: #bcb9ae;
+      --accent: #9b4833;
+      --accent2: #d6c5b5;
+      --white: #f9f8f4;
+      --max: 1440px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); min-height: 100dvh; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .shell { max-width: var(--max); min-height: 100dvh; margin: auto; padding: 0 clamp(20px, 5.2vw, 82px); display: flex; flex-direction: column; }
+    .topbar { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--ink); font-size: 11px; font-weight: 700; letter-spacing: .13em; }
+    .topbar a { text-decoration: none; color: inherit; }
+    .topbar a:hover { color: var(--accent); }
+    .topbar-right { display: flex; align-items: center; gap: clamp(14px, 3vw, 40px); }
+    .plain-btn { background: none; border: 0; color: inherit; padding: 8px 0; font-size: 11px; letter-spacing: .12em; font-weight: bold; text-transform: uppercase; }
+    .plain-btn:hover { color: var(--accent); }
+    .progress-track { height: 3px; width: 100%; background: var(--paper2); border-bottom: 1px solid var(--line); }
+    .progress-fill { display: block; width: 10%; height: 3px; background: var(--accent); transition: width .32s ease; }
+    .stage { position: relative; flex: 1; padding: clamp(30px, 5vw, 74px) 0 clamp(18px, 3vw, 36px); outline: 0; }
+    .stage:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+    .overline { display: flex; justify-content: space-between; gap: 20px; align-items: start; font-size: 10px; font-weight: 700; line-height: 1.5; letter-spacing: .17em; color: var(--muted); text-transform: uppercase; }
+    .overline .section-id { color: var(--accent); }
+    .slide-grid { display: grid; grid-template-columns: minmax(0, 1.27fr) minmax(285px, .73fr); gap: clamp(36px, 6.8vw, 105px); align-items: end; padding-top: clamp(38px, 5.3vw, 76px); }
+    .main-idea { min-width: 0; }
+    .chapter-label { margin: 0 0 17px; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { max-width: 950px; margin: 0; font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif; font-size: clamp(49px, 6.9vw, 110px); font-weight: 500; letter-spacing: -.074em; line-height: .965; overflow-wrap: anywhere; }
+    .summary { margin: clamp(28px, 3.5vw, 47px) 0 0; max-width: 690px; font-size: clamp(16px, 1.62vw, 22px); line-height: 1.43; letter-spacing: -.022em; }
+    .recall-line { max-width: 685px; display: grid; grid-template-columns: 84px 1fr; margin-top: clamp(35px, 5vw, 68px); padding: 18px 0 0; border-top: 1px solid var(--ink); gap: 17px; }
+    .small-label { font-size: 10px; letter-spacing: .12em; line-height: 1.45; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .recall-line p { margin: -3px 0 0; font-size: clamp(17px, 1.5vw, 22px); font-weight: 600; letter-spacing: -.025em; line-height: 1.23; }
+    .side { padding-top: 8px; align-self: stretch; display: flex; flex-direction: column; justify-content: flex-end; }
+    .side-heading { border-top: 2px solid var(--ink); padding-top: 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .side-heading .mark { color: var(--accent); }
+    .concept { margin: 28px 0 clamp(34px, 5vw, 82px); font-size: clamp(29px, 3vw, 48px); line-height: 1.05; letter-spacing: -.06em; font-weight: 500; }
+    .causal { display: grid; gap: 0; border-top: 1px solid var(--line); }
+    .causal-cell { padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .causal-cell span { display: block; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); }
+    .causal-cell p { font-size: 16px; line-height: 1.31; margin: 10px 0 0; letter-spacing: -.025em; }
+    .interaction-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border-top: 1px solid var(--ink); margin-top: clamp(48px, 7vw, 96px); background: var(--line); border-bottom: 1px solid var(--ink); }
+    details { display: block; background: var(--paper); min-width: 0; }
+    details[open] { background: var(--white); }
+    details summary { list-style: none; display: flex; justify-content: space-between; gap: 18px; padding: 22px 22px 22px 0; min-height: 66px; cursor: pointer; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    details:nth-child(2) summary { padding-left: 22px; }
+    details summary::-webkit-details-marker { display: none; }
+    .summary-symbol { font-size: 20px; font-weight: 400; line-height: .6; color: var(--accent); }
+    details[open] .summary-symbol { transform: rotate(45deg); }
+    .detail-body { padding: 0 28px 25px 0; max-width: 660px; font-size: 15px; line-height: 1.54; letter-spacing: -.005em; }
+    details:nth-child(2) .detail-body { padding-left: 22px; }
+    .detail-body p { margin: 3px 0 0; }
+    .detail-body .prompt { color: var(--muted); margin-bottom: 15px; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
+    .answer-btn { padding: 11px 16px; border: 1px solid var(--ink); background: transparent; color: inherit; margin-top: 16px; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .answer-btn:hover { background: var(--ink); color: var(--white); }
+    .answer { margin-top: 15px !important; border-left: 3px solid var(--accent); padding-left: 17px; font-weight: 600; }
+    .answer[hidden] { display: none; }
+    .bottombar { border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1fr auto 1fr; gap: 15px; align-items: center; min-height: 82px; }
+    .arrow-btn { border: 0; padding: 14px 0; background: none; display: flex; align-items: center; gap: 16px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .arrow-btn:hover:not(:disabled) { color: var(--accent); }
+    .arrow-btn:disabled { opacity: .24; cursor: not-allowed; }
+    .arrow-next { justify-self: end; }
+    .arr { font-size: 30px; line-height: .8; font-weight: normal; }
+    .count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .count strong { color: var(--ink); font-size: 17px; }
+    .footline { display: flex; gap: 16px; justify-content: space-between; align-items: start; padding: 18px 0 28px; color: var(--muted); font-size: 10px; letter-spacing: .065em; line-height: 1.5; }
+    .footline p { margin: 0; }
+    .footline p:last-child { text-align: right; }
+    dialog { width: min(690px, calc(100% - 30px)); max-height: min(88dvh, 920px); border: 1px solid var(--ink); padding: clamp(20px, 3vw, 40px); color: var(--ink); background: var(--paper); box-shadow: 0 20px 70px #0005; }
+    dialog::backdrop { background: #171714ae; backdrop-filter: blur(2px); }
+    .dialog-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 1px solid var(--ink); padding-bottom: 16px; font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .dialog-list { margin-top: 18px; display: grid; gap: 0; }
+    .jump { display: grid; grid-template-columns: 48px 1fr; gap: 16px; text-align: left; border: 0; border-bottom: 1px solid var(--line); padding: 16px 0; background: transparent; color: var(--ink); align-items: baseline; }
+    .jump span:first-child { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: .12em; }
+    .jump span:last-child { font-size: clamp(17px, 3vw, 23px); letter-spacing: -.035em; line-height: 1.14; }
+    .jump:hover span:last-child, .jump[aria-current="step"] span:last-child { text-decoration: underline; text-underline-offset: 4px; }
+    .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 850px) {
+      .topbar { min-height: 64px; }
+      .topbar-right .small-screen-hide { display: none; }
+      .slide-grid { grid-template-columns: minmax(0,1fr); gap: 38px; }
+      h1 { font-size: clamp(48px, 9vw, 80px); }
+      .summary { max-width: 660px; }
+      .side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0,1fr); column-gap: 30px; align-items: start; }
+      .side-heading { grid-column: 1/-1; }
+      .concept { margin: 24px 0 0; }
+      .causal { margin-top: 18px; }
+      .interaction-row { margin-top: 50px; }
+    }
+    @media (max-width: 570px) {
+      .overline { flex-direction: column; gap: 7px; }
+      .slide-grid { padding-top: 30px; gap: 32px; }
+      h1 { font-size: clamp(46px, 13.2vw, 69px); letter-spacing: -.067em; }
+      .summary { font-size: 16px; }
+      .recall-line { grid-template-columns: 1fr; gap: 10px; margin-top: 35px; }
+      .recall-line p { font-size: 18px; }
+      .side { display: block; }
+      .concept { margin: 20px 0 26px; font-size: 34px; }
+      .causal { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .causal-cell { padding: 12px 0; }
+      .causal-cell p { font-size: 14px; }
+      .interaction-row { grid-template-columns: 1fr; }
+      details:nth-child(2) summary, details:nth-child(2) .detail-body { padding-left: 0; }
+      details summary { padding: 20px 0; min-height: 61px; }
+      .detail-body { padding-bottom: 20px; }
+      .bottombar { min-height: 77px; }
+      .arrow-btn { gap: 7px; font-size: 9px; }
+      .arr { font-size: 23px; }
+      .count { font-size: 11px; }
+      .count strong { font-size: 14px; }
+      .footline { flex-direction: column; gap: 4px; }
+      .footline p:last-child { text-align: left; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .progress-fill { transition: none; } }
+    @media print {
+      body { background: white; }
+      .topbar-right, .progress-track, .bottombar, .footline { display: none; }
+      .stage { padding: 26px 0; }
+      details { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a href="../../" aria-label="Volver al índice de LAB">NGRR / LAB</a>
+      <div class="topbar-right">
+        <span class="small-screen-hide">EXPERIMENTO 002 / LECTURA CRÍTICA</span>
+        <button type="button" class="plain-btn" id="openIndex" aria-haspopup="dialog">Índice <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+    <div class="progress-track" role="progressbar" aria-label="Progreso de la lectura" aria-valuemin="1" aria-valuemax="10" aria-valuenow="1" id="progressTrack"><span class="progress-fill" id="progressFill"></span></div>
+    <main class="stage" id="stage" tabindex="-1" aria-label="Lámina actual">
+      <div class="overline"><span class="section-id" id="sectionId">01 / 10</span><span id="source">George Orwell · Rebelión en la granja</span></div>
+      <div class="slide-grid">
+        <article class="main-idea">
+          <p class="chapter-label" id="chapter">Mapa de lectura</p>
+          <h1 id="slideTitle">De la emancipación a la obediencia.</h1>
+          <p class="summary" id="summary"></p>
+          <div class="recall-line"><span class="small-label">IDEA PARA<br>RETENER</span><p id="takeaway"></p></div>
+        </article>
+        <aside class="side" aria-label="Concepto y mecanismo">
+          <div class="side-heading"><span>Clave conceptual</span><span class="mark" id="conceptNo">01</span></div>
+          <p class="concept" id="concept"></p>
+          <div class="causal">
+            <div class="causal-cell"><span id="beforeLabel">Punto de partida</span><p id="before"></p></div>
+            <div class="causal-cell"><span id="afterLabel">Resultado</span><p id="after"></p></div>
+          </div>
+        </aside>
+      </div>
+      <div class="interaction-row">
+        <details id="readingNote"><summary>Apunte de lectura <span class="summary-symbol" aria-hidden="true">+</span></summary><div class="detail-body"><p id="note"></p></div></details>
+        <details id="recallNote"><summary>Pregunta para recordar <span class="summary-symbol" aria-hidden="true">+</span></summary><div class="detail-body"><p class="prompt">Recuperación activa</p><p id="question"></p><button type="button" class="answer-btn" id="revealAnswer" aria-expanded="false">Revelar respuesta</button><p id="answer" class="answer" hidden></p></div></details>
+      </div>
+    </main>
+    <nav class="bottombar" aria-label="Navegación de láminas">
+      <button class="arrow-btn" type="button" id="prev"><span class="arr" aria-hidden="true">←</span><span>Anterior</span></button>
+      <span class="count" aria-live="polite"><strong id="current">01</strong> / 10</span>
+      <button class="arrow-btn arrow-next" type="button" id="next"><span>Siguiente</span><span class="arr" aria-hidden="true">→</span></button>
+    </nav>
+    <footer class="footline"><p>SÍNTESIS CRÍTICA · SPOILERS DE LA NOVELA · SIN TEXTO COMPLETO</p><p>← → NAVEGAR · ÍNDICE PARA IR A UNA LÁMINA</p></footer>
+  </div>
+  <dialog id="indexDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-head"><span id="dialogTitle">Mapa / 10 láminas</span><button class="plain-btn" id="closeIndex" type="button">Cerrar ×</button></div>
+    <nav class="dialog-list" id="jumpList" aria-label="Ir a una lámina"></nav>
+  </dialog>
+  <script>
+    "use strict";
+    const slides = [
+      {
+        chapter: "00 — Premisa",
+        title: "De la emancipación a la obediencia.",
+        summary: "Los animales expulsan al propietario para vivir del fruto de su trabajo. La revolución acaba concentrando el poder en quienes prometían abolir la dominación.",
+        takeaway: "La pregunta decisiva no es solo quién gobierna: es quién controla a quien gobierna.",
+        concept: "Paradoja del poder",
+        before: "Una revolución contra el abuso.",
+        after: "Una nueva élite reproduce la desigualdad.",
+        note: "La fábula permite seguir un proceso, no solamente juzgar personajes: denuncia, promesa, organización, privilegio, coerción y restauración. La lectura política alude a la historia soviética, pero la estructura narrativa permite analizar otros mecanismos de dominación.",
+        question: "¿Qué contradicción organiza toda la novela?",
+        answer: "Los liberados crean un sistema que acaba reproduciendo el poder, los privilegios y la explotación que combatían.",
+        source: "Novela, capítulos I–X · PDF pp. 25–117"
+      },
+      {
+        chapter: "01 — El origen",
+        title: "La injusticia tiene un responsable.",
+        summary: "El Viejo Mayor sostiene que los animales trabajan, mientras los humanos se apropian de los productos. Su discurso transforma el sufrimiento cotidiano en una causa colectiva.",
+        takeaway: "Una denuncia puede unir al grupo; no constituye por sí sola una garantía de libertad futura.",
+        concept: "Explotación",
+        before: "Trabajo, hambre y vidas cortas.",
+        after: "La rebelión aparece como solución común.",
+        note: "Mayor rechaza que la miseria se deba a la pobreza natural de la granja: atribuye la escasez a la apropiación del trabajo. Ese diagnóstico es coherente con la experiencia de los animales, pero deja sin resolver cómo controlar a los futuros dirigentes.",
+        question: "¿Qué diferencia hay entre el diagnóstico de Mayor y una organización política justa?",
+        answer: "El primero identifica al explotador; la segunda necesitaría instituciones capaces de impedir nuevos abusos dentro del propio grupo.",
+        source: "Capítulo I · PDF pp. 25–32"
+      },
+      {
+        chapter: "02 — La promesa",
+        title: "La igualdad se escribe en la pared.",
+        summary: "Jones es expulsado y la Granja Manor se convierte en Granja Animal. Nacen siete mandamientos, pero la leche y las manzanas quedan reservadas para los cerdos.",
+        takeaway: "La primera desigualdad se presenta como una excepción necesaria para proteger a todos.",
+        concept: "Norma frente a práctica",
+        before: "«Todos los animales son iguales».",
+        after: "Los cerdos concentran alimento y conocimiento.",
+        note: "Los cerdos dominan la lectura, escriben las reglas y explican que su trabajo intelectual requiere una dieta especial. El privilegio surge cuando todavía existe una retórica compartida de igualdad: la ruptura comienza antes de que aparezca el terror.",
+        question: "¿Por qué la leche y las manzanas son políticamente importantes?",
+        answer: "Porque inauguran privilegios materiales justificados por la supuesta necesidad del liderazgo, pese al principio explícito de igualdad.",
+        source: "Capítulos II–III · PDF pp. 33–47"
+      },
+      {
+        chapter: "03 — La ruptura",
+        title: "La asamblea deja de decidir.",
+        summary: "Snowball propone el molino y debate con Napoleón. Los perros educados en secreto por este último expulsan a Snowball; después se suprimen las reuniones deliberativas.",
+        takeaway: "Cuando una facción monopoliza la fuerza, el desacuerdo deja de ser una opción política.",
+        concept: "Poder coercitivo",
+        before: "Debate entre proyectos rivales.",
+        after: "Órdenes del líder, custodiadas por perros.",
+        note: "Napoleón aparta a los cachorros cuando son pequeños y los convierte en su guardia personal. El desenlace de la disputa sobre el molino no depende de argumentos: la coerción elimina al adversario y Squealer presenta la nueva jerarquía como un sacrificio del líder.",
+        question: "¿Cuál es el cambio institucional más importante tras la expulsión de Snowball?",
+        answer: "El fin de la deliberación colectiva: el líder y sus allegados deciden, mientras los demás reciben instrucciones.",
+        source: "Capítulo V · PDF pp. 53–62"
+      },
+      {
+        chapter: "04 — El proyecto",
+        title: "El futuro siempre se aplaza.",
+        summary: "El molino promete electricidad y alivio del trabajo, pero exige esfuerzos continuos. Napoleón se apropia del proyecto y el bienestar de los animales sigue postergado.",
+        takeaway: "El símbolo del progreso puede funcionar como mecanismo para exigir sacrificios sin cumplir la promesa.",
+        concept: "Promesa aplazada",
+        before: "Máquinas, descanso y mejor vida.",
+        after: "Reconstrucciones, comercio y más trabajo.",
+        note: "Primero el molino cae por una tormenta y Napoleón acusa a Snowball; más tarde los hombres de Frederick destruyen otra versión. Finalmente el molino construido se utiliza para moler maíz y generar ingresos, no para producir la electricidad anunciada. El relato del éxito se separa del beneficio real para quienes trabajaron.",
+        question: "¿Cómo cambia el sentido del molino entre su propuesta y su resultado?",
+        answer: "Pasa de ser una promesa de emancipación del trabajo a un proyecto de movilización y rentabilidad administrado por la élite.",
+        source: "Capítulos V–VIII y X · PDF pp. 53–95, 108"
+      },
+      {
+        chapter: "05 — El miedo",
+        title: "Inventar al enemigo ordena el terror.",
+        summary: "Snowball, ya expulsado, se convierte en culpable habitual de las desgracias. Las confesiones y ejecuciones ordenadas por Napoleón destruyen la confianza entre los animales.",
+        takeaway: "Un enemigo absoluto permite explicar todo fracaso sin examinar las decisiones del poder.",
+        concept: "Chivo expiatorio",
+        before: "Problemas de producción y conflicto.",
+        after: "Conspiración, delación y castigo.",
+        note: "La atribución de sabotajes a Snowball sustituye la investigación por un relato cerrado. Durante las purgas, varios animales confiesan supuestos crímenes y son ejecutados. Después se prohíbe el canto «Bestias de Inglaterra»: la expectativa de liberación cede su lugar a la obediencia.",
+        question: "¿Para qué sirve políticamente convertir a Snowball en traidor permanente?",
+        answer: "Para desplazar la responsabilidad de Napoleón, unificar al grupo contra un adversario y justificar la violencia.",
+        source: "Capítulos VII–VIII · PDF pp. 72–84"
+      },
+      {
+        chapter: "06 — El lenguaje",
+        title: "La palabra altera la prueba.",
+        summary: "Squealer sustituye reducciones por «reajustes», recita cifras favorables y explica por qué los privilegios no contradicen las reglas. Los mandamientos reciben añadidos decisivos.",
+        takeaway: "Si el poder controla el registro y su interpretación, la contradicción deja de poder demostrarse.",
+        concept: "Manipulación del relato",
+        before: "«Ningún animal dormirá en una cama».",
+        after: "«Ningún animal dormirá en una cama con sábanas».",
+        note: "La prohibición de matar pasa a incluir «sin motivo»; la de beber alcohol, «en exceso». La regla no se deroga ante todos: se reescribe silenciosamente y se culpa a la memoria de los animales. La escasa alfabetización y la ausencia de archivos independientes hacen posible esta operación.",
+        question: "¿Por qué añadir una condición a una prohibición es más eficaz que eliminarla?",
+        answer: "Porque conserva la apariencia de continuidad legal y permite legitimar retroactivamente el comportamiento de los gobernantes.",
+        source: "Capítulos VI, VIII–IX · PDF pp. 68–69, 83–84, 96–97"
+      },
+      {
+        chapter: "07 — El sacrificio",
+        title: "Boxer trabaja hasta desaparecer.",
+        summary: "Boxer encarna la lealtad y el esfuerzo: «Trabajaré más fuerte» y «Napoleón siempre tiene razón». Cuando cae enfermo, es enviado en el vehículo de un matarife.",
+        takeaway: "La entrega individual no protege a quien carece de medios para exigir responsabilidad.",
+        concept: "Lealtad explotada",
+        before: "El trabajo como compromiso colectivo.",
+        after: "El trabajador agotado pasa a ser desechable.",
+        note: "Benjamín lee la inscripción del furgón y advierte del destino de Boxer. Después Squealer afirma que lo compró un veterinario y que Boxer murió atendido en un hospital. La versión oficial consigue neutralizar una evidencia visible y reorganizar el duelo.",
+        question: "¿Qué revelan los dos lemas de Boxer sobre sus límites políticos?",
+        answer: "Confunde la responsabilidad de trabajar con una obediencia incondicional al líder; renuncia a comprobar si las órdenes sirven al proyecto común.",
+        source: "Capítulos VI y IX · PDF pp. 64, 96–106"
+      },
+      {
+        chapter: "08 — El desenlace",
+        title: "El enemigo termina en el espejo.",
+        summary: "Los cerdos caminan sobre dos patas, usan látigos, pactan con granjeros y recuperan el nombre Granja Manor. Desde fuera, los animales ya no distinguen a cerdos y humanos.",
+        takeaway: "La revolución fracasa cuando su clase dirigente se vuelve indistinguible del antiguo amo.",
+        concept: "Restauración del privilegio",
+        before: "«Todos los animales son iguales».",
+        after: "«…pero algunos animales son más iguales que otros».",
+        note: "El único mandamiento restante convierte la igualdad en su contrario. La transformación es material, legal y simbólica: vuelven los hábitos humanos, la autoridad del látigo y el nombre original de la granja. La escena de la ventana cierra el arco iniciado con la expulsión de Jones.",
+        question: "¿Por qué el final no es simplemente una victoria de los cerdos?",
+        answer: "Porque muestra la restauración de las mismas relaciones de dominación que motivaron la rebelión.",
+        source: "Capítulo X · PDF pp. 107–117"
+      },
+      {
+        chapter: "09 — Clave de lectura",
+        title: "La libertad necesita disidencia.",
+        summary: "En «La libertad de prensa», Orwell denuncia la autocensura y la subordinación de la verdad a la conveniencia política. Ese ensayo ilumina el mecanismo intelectual de la granja.",
+        takeaway: "Tres alarmas: se cancela la deliberación, se reescribe la norma y se sustituye la evidencia por una versión oficial.",
+        concept: "Libertad intelectual",
+        before: "Crítica y hechos verificables.",
+        after: "Ortodoxia y silencio voluntario.",
+        note: "Esta edición incluye el estudio de Bernard Crick sobre las dificultades de publicación y el prólogo no incorporado originalmente. Conviene distinguir los planos: la novela representa la captura interna de una revolución; el ensayo interroga también la autocensura de editores e intelectuales fuera de ese régimen. Crick considera que prescindir del prólogo explícito reforzó la dimensión universal de la fábula.",
+        question: "¿Cuáles son las tres señales que permiten detectar la deriva autoritaria?",
+        answer: "Pérdida de espacios de decisión, modificación oportunista de reglas y monopolio de la memoria y de los hechos.",
+        source: "Bernard Crick, PDF pp. 2–12; Orwell, «La libertad de prensa», pp. 13–24"
+      }
+    ];
+    const byId = (id) => document.getElementById(id);
+    const stage = byId("stage");
+    const dialog = byId("indexDialog");
+    const jumpList = byId("jumpList");
+    let position = 0;
+    const twoDigits = (number) => String(number).padStart(2, "0");
+    const legalPosition = (number) => Math.min(slides.length - 1, Math.max(0, number));
+    function fromHash() {
+      const m = location.hash.match(/^#(?:lamina-)?(\d{1,2})$/i);
+      return m ? legalPosition(Number(m[1]) - 1) : null;
+    }
+    function render(index, shouldFocus) {
+      position = legalPosition(index);
+      const slide = slides[position];
+      const n = twoDigits(position + 1);
+      document.title = n + "/10 — Rebelión en la granja / LAB";
+      byId("sectionId").textContent = n + " / 10";
+      byId("conceptNo").textContent = n;
+      byId("current").textContent = n;
+      byId("chapter").textContent = slide.chapter;
+      byId("slideTitle").textContent = slide.title;
+      byId("summary").textContent = slide.summary;
+      byId("takeaway").textContent = slide.takeaway;
+      byId("concept").textContent = slide.concept;
+      byId("before").textContent = slide.before;
+      byId("after").textContent = slide.after;
+      byId("note").textContent = slide.note;
+      byId("question").textContent = slide.question;
+      byId("answer").textContent = slide.answer;
+      byId("source").textContent = slide.source;
+      byId("readingNote").open = false;
+      byId("recallNote").open = false;
+      byId("answer").hidden = true;
+      byId("revealAnswer").textContent = "Revelar respuesta";
+      byId("revealAnswer").setAttribute("aria-expanded", "false");
+      byId("prev").disabled = position === 0;
+      byId("next").disabled = position === slides.length - 1;
+      byId("progressFill").style.width = ((position + 1) / slides.length * 100) + "%";
+      byId("progressTrack").setAttribute("aria-valuenow", String(position + 1));
+      document.querySelectorAll(".jump").forEach((button, idx) => {
+        if (idx === position) button.setAttribute("aria-current", "step");
+        else button.removeAttribute("aria-current");
+      });
+      history.replaceState(null, "", "#"+n);
+      try { localStorage.setItem("lab-orwell-slide-v1", String(position)); } catch (_) {}
+      if (shouldFocus) {
+        window.scrollTo({top: 0, behavior: "instant"});
+        stage.focus({preventScroll: true});
+      }
+    }
+    function navigate(delta) { render(position + delta, true); }
+    slides.forEach((slide, index) => {
+      const button = document.createElement("button");
+      const digit = document.createElement("span");
+      const title = document.createElement("span");
+      button.type = "button";
+      button.className = "jump";
+      digit.textContent = twoDigits(index + 1);
+      title.textContent = slide.title;
+      button.append(digit, title);
+      button.addEventListener("click", () => { dialog.close(); render(index, true); });
+      jumpList.append(button);
+    });
+    byId("prev").addEventListener("click", () => navigate(-1));
+    byId("next").addEventListener("click", () => navigate(1));
+    byId("openIndex").addEventListener("click", () => dialog.showModal());
+    byId("closeIndex").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
+    byId("revealAnswer").addEventListener("click", () => {
+      const answer = byId("answer");
+      const visible = !answer.hidden;
+      answer.hidden = visible;
+      byId("revealAnswer").textContent = visible ? "Revelar respuesta" : "Ocultar respuesta";
+      byId("revealAnswer").setAttribute("aria-expanded", String(!visible));
+    });
+    document.addEventListener("keydown", (event) => {
+      if (dialog.open || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (/^(INPUT|TEXTAREA|SELECT|BUTTON|SUMMARY)$/.test(document.activeElement.tagName)) return;
+      if (event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); navigate(1); }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); navigate(-1); }
+      if (event.key === "Home") { event.preventDefault(); render(0, true); }
+      if (event.key === "End") { event.preventDefault(); render(slides.length - 1, true); }
+    });
+    let gesture = null;
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.pointerType !== "touch" || event.target.closest("button, a, summary, details")) return;
+      gesture = {x: event.clientX, y: event.clientY};
+    });
+    stage.addEventListener("pointerup", (event) => {
+      if (!gesture) return;
+      const dx = event.clientX - gesture.x, dy = event.clientY - gesture.y;
+      gesture = null;
+      if (Math.abs(dx) > 85 && Math.abs(dx) > 1.5 * Math.abs(dy)) navigate(dx < 0 ? 1 : -1);
+    });
+    window.addEventListener("hashchange", () => {
+      const index = fromHash();
+      if (index !== null && index !== position) render(index, true);
+    });
+    let initial = fromHash();
+    if (initial === null) {
+      try {
+        const stored = Number(localStorage.getItem("lab-orwell-slide-v1"));
+        if (Number.isInteger(stored) && stored >= 0 && stored < slides.length) initial = stored;
+      } catch (_) {}
+    }
+    render(initial === null ? 0 : initial, false);
+  </script>
+</body>
+</html>
