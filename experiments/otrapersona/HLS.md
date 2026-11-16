@@ -9,3 +9,7 @@ Safari emplea HLS nativo; los navegadores compatibles restantes usan HLS.js 1.7.
 ## Regeneración local
 
 Conservar las fuentes de audio fuera del repositorio. Ejecutar `python3 experiments/otrapersona/tools/build_hls.py /ruta/privada/al/audio-continuo.mp3` con FFmpeg y OpenSSL instalados. El script valida la decodificación e incorpora una clave aleatoria nueva. Publicar solo los segmentos, el manifiesto y su clave, nunca el archivo fuente.
+
+## Salida remota
+
+La fase 1 utiliza el selector AirPlay de WebKit o Remote Playback API con HLS nativo, sin fuentes alternativas ni cambios en los 62 segmentos. El soporte de la API no garantiza que un receptor pueda descifrar/reproducir esta fuente. HLS.js/MSE no se anuncia como compatible con transmisión remota. Google Cast específico y receptor audiovisual para TV quedan pendientes de fase posterior.
