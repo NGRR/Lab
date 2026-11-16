@@ -15,4 +15,4 @@ Cada proyecto vive en su propia carpeta, con documentación, dependencias y lím
 
 El archivo `index.html` de la raíz actúa como índice navegable si GitHub Pages se habilita para `main` / `/(root)`.
 
-> **Nota de derechos:** el repositorio fue creado con licencia CC0 1.0. Revisar los derechos y la licencia antes de incorporar obras, grabaciones, fotografías, tipografías u otros materiales protegidos.
+> **Licencias:** CC0 1.0 para el código propio de Lab susceptible de esa dedicación. Los contenidos artísticos de Otrapersona están expresamente excluidos; véase [reserva de derechos](./experiments/otrapersona/RIGHTS.md). No se otorgan permisos adicionales sobre materiales de terceros ni se revocan permisos anteriores válidos.

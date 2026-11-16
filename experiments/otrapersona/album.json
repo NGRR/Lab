@@ -3,7 +3,6 @@
   "album": "Otrapersona",
   "cover": "./assets/portada.jpg",
   "mediaArtwork": "./assets/portada-512.jpg",
-  "audio": "./assets/otrapersona.mp3",
   "duration": 491.833469,
   "tracks": [
     {
@@ -20,5 +19,6 @@
     "spotify": "",
     "youtube": "",
     "instagram": ""
-  }
+  },
+  "hls": "./assets/stream/album.m3u8"
 }
