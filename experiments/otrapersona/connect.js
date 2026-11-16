@@ -3,7 +3,7 @@
 const endpoint='https://eqdhxepqsutufynonacr.supabase.co/functions/v1/otrapersona-connect';
 global.OtrapersonaConnect=function(adapter){
 const $=id=>document.getElementById(id),tv=new URLSearchParams(location.search).get('tv')==='1';
-let id=null,token=null,epoch=0,ack=0,blocked=false,busy=false,online=false,paired=false,dragging=false,sourceReady=false,timer=null;
+let id=null,token=null,epoch=0,ack=0,blocked=false,busy=false,online=false,paired=false,dragging=false,sourceReady=false,timer=null,creating=false;
 const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
 const msg=t=>{$('connectMessage').textContent=t;};
 const controls=()=>$('connectControls').querySelectorAll('button,input');
@@ -16,7 +16,7 @@ async function api(action,data={}){
 }
 function withSession(action,data={}){return api(action,{id,token,...data})}
 function reset(text){
- epoch++;clearTimeout(timer);timer=null;id=token=null;busy=online=paired=blocked=false;ack=0;dragging=false;
+ epoch++;creating=false;clearTimeout(timer);timer=null;id=token=null;busy=online=paired=blocked=false;ack=0;dragging=false;
  $('connectControls').hidden=true;$('connectClose').hidden=true;$('connectCode').hidden=true;
  $('connectPhone').hidden=tv;$('connectCreate').disabled=!sourceReady;$('connectPair').disabled=false;
  setControls();msg(text||'');
@@ -49,7 +49,7 @@ async function poll(e){
  }catch(err){if(e!==epoch)return;if(err.message==='not_found'){reset('Sesión finalizada o caducada.');return;}online=false;setControls();msg('Conexión interrumpida. Reintentando…');schedule(e,5000);}
 }
 async function create(){
- if(id||!sourceReady)return;$('connectCreate').disabled=true;
+ if(id||creating||!sourceReady)return;creating=true;$('connectCreate').disabled=true;
  // Playback starts on the TV itself from an explicit gesture, before any network await.
  const activation=adapter.play();const e=++epoch;msg('Creando sesión…');
  try{await activation;if(e!==epoch)return;const r=await api('create');if(e!==epoch)return;
@@ -79,6 +79,6 @@ $('connectSeek').addEventListener('change',()=>{dragging=false;send('seek',Numbe
 $('connectSeek').addEventListener('pointercancel',()=>{dragging=false;});
 adapter.audio.addEventListener('playing',()=>{if(tv)blocked=false;});
 if(tv){document.body.classList.add('tv-mode');panel(true);$('connectPhone').hidden=true;$('connectTV').hidden=false;}
-return {sourceReady(value){sourceReady=!!value;if(!id)$('connectCreate').disabled=!sourceReady;}};
+return {sourceReady(value){sourceReady=!!value;if(!id)$('connectCreate').disabled=!sourceReady||creating;}};
 };
 })(window);
