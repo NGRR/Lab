@@ -34,3 +34,7 @@ El contenido musical y gráfico está excluido de CC0. [Todos los derechos reser
 - Código de un solo uso, caducidad de 5 minutos antes de vincular; sesión de máximo 2 horas. Tokens aleatorios por rol, almacenados como hashes en el backend. No se publican credenciales administrativas. Límite de 60 sesiones activas.
 - Backend: función Edge `otrapersona-connect` en el proyecto Supabase existente, tabla aislada con RLS y RPC accesible únicamente por service_role. La función realiza autenticación propia por token de sesión; no modifica otros datos del proyecto. No es Google Cast ni enciende el televisor; el usuario debe abrir su navegador y activar el sonido. La supresión del proceso del teléfono en segundo plano puede detener el mando.
 - La prueba física del navegador Samsung sigue pendiente. La música, cifrado y los 62 segmentos no cambian.
+
+## Bridge — apertura remota del navegador
+
+[Instalación y prueba local](./bridge/README.md). Puente Python en la LAN del Samsung; el teléfono puede estar en LTE. No afecta HLS, AirPlay ni Connect. Solo abre la URL fija, sujeto al firmware.
