@@ -66,6 +66,7 @@
         }).finally(()=>{opening=false;paint();});
       }catch{opening=false;error='No se pudo abrir el selector de dispositivos.';paint();}
     });
+    paint();
     return {setSource(mode,isReady){
       if(source===mode&&ready===!!isReady)return;
       const wasReady=ready;
