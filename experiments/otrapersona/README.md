@@ -29,7 +29,7 @@ El contenido musical y gráfico está excluido de CC0. [Todos los derechos reser
 ## Otrapersona Connect (experimental)
 
 - Teléfono: abrir el reproductor y seleccionar Conectar a TV por Internet.
-- TV: abrir la misma URL con `?tv=1`, activar receptor y reproducir; introducir en el teléfono el código de 12 caracteres que muestra el televisor.
+- TV: abrir `https://ngrr.github.io/Lab/tv/` (acceso corto al receptor; guardar en favoritos), activar receptor y reproducir; introducir en el teléfono el código de 12 caracteres que muestra el televisor.
 - Control remoto por HTTPS con consulta periódica (1.5–3 s, con reconexión). No requiere compartir Wi-Fi; ambos requieren Internet. El volumen se controla en la TV. El dispositivo TV debe admitir el flujo HLS existente.
 - Código de un solo uso, caducidad de 5 minutos antes de vincular; sesión de máximo 2 horas. Tokens aleatorios por rol, almacenados como hashes en el backend. No se publican credenciales administrativas. Límite de 60 sesiones activas.
 - Backend: función Edge `otrapersona-connect` en el proyecto Supabase existente, tabla aislada con RLS y RPC accesible únicamente por service_role. La función realiza autenticación propia por token de sesión; no modifica otros datos del proyecto. No es Google Cast ni enciende el televisor; el usuario debe abrir su navegador y activar el sonido. La supresión del proceso del teléfono en segundo plano puede detener el mando.
