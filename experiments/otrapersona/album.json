@@ -1,0 +1,24 @@
+{
+  "artist": "Otrapersona",
+  "album": "Otrapersona",
+  "cover": "./assets/portada.jpg",
+  "mediaArtwork": "./assets/portada-512.jpg",
+  "audio": "./assets/otrapersona.mp3",
+  "duration": 491.833469,
+  "tracks": [
+    {
+      "title": "Cimiento",
+      "start": 0
+    },
+    {
+      "title": "Cobijos de tierra",
+      "start": 273.502041
+    }
+  ],
+  "links": {
+    "bandcamp": "",
+    "spotify": "",
+    "youtube": "",
+    "instagram": ""
+  }
+}
