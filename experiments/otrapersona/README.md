@@ -14,6 +14,12 @@ El sitio utiliza exclusivamente HLS cifrado, servido desde `assets/stream/`. Las
 - Se mantiene el archivo continuo y metadatos/tiempos por pista lógica. iOS puede ignorar la posición relativa o elegir sus propios controles.
 - El campo de álbum usa provisionalmente Otrapersona, sin inventar un título independiente.
 
+## Repetición
+
+- Repetir álbum está activado por defecto; el botón Repeat permite desactivarlo. Se recuerda la preferencia mediante localStorage cuando está disponible.
+- Se emplea el atributo nativo `loop` del elemento de audio sobre el HLS continuo, con respaldo en el evento `ended` para navegadores que lo disparen a pesar de loop. Con la repetición activada, Siguiente desde la última pista vuelve a la primera. Desactivada, el álbum termina normalmente.
+- La repetición con pantalla bloqueada en iOS depende del navegador y requiere prueba física.
+
 ## Propiedad intelectual
 
 El contenido musical y gráfico está excluido de CC0. [Todos los derechos reservados](./RIGHTS.md), sin perjuicio de la legislación, las condiciones de GitHub y los permisos anteriores válidos.
