@@ -677,7 +677,7 @@ if(!main||!tail)return null;
 const entries=[...tail.matchAll(/(?:^|[\r\n\u2028\u2029]+)[\t \u00a0]*(?:\[(\d{1,5})\]|(\d{1,5})[.)])[\t \u00a0]+/g)];
 if(!entries.length||entries[0].index!==0||entries.length>1000)return null;
 const notes=new Map();for(let j=0;j<entries.length;j++){const m=entries[j],num=Number(m[1]||m[2]),body=tail.slice(m.index+m[0].length,entries[j+1]?.index??tail.length).trim();if(num<1||notes.has(num)||!body||body.length>30000||!validText(body))return null;notes.set(num,body)}
-const refs=[...main.matchAll(/\[(\d{1,5})\]/g)].filter(m=>notes.has(Number(m[1])));
+const refs=[...main.matchAll(/\[(\d{1,5})\]/g)];if(refs.some(m=>!notes.has(Number(m[1]))))return null;
 if(refs.length!==notes.size||new Set(refs.map(m=>Number(m[1]))).size!==notes.size)return null;
 const cuts=refs.map(m=>({start:m.index,end:m.index+m[0].length,number:Number(m[1])}));
 let removed=0,out='',last=0;const footnotes=[];for(const c of cuts){out+=main.slice(last,c.start);footnotes.push({offset:c.start-removed,text:notes.get(c.number),key:'fn:'+c.number});removed+=c.end-c.start;last=c.end}out+=main.slice(last);
